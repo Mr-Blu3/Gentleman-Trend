@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "bourbon": "^5.0.0",
+    "sass-loader": "^6.0.7",
+    "susy": "^3.0.3",
+    "webpack": "^4.5.0",
+    "webpack-cli": "^2.0.14"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-cli": "^2.0.1"
+  }
+}

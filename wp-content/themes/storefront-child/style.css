@@ -1,0 +1,53 @@
+/*
+ Theme Name:   storefront Child
+ Theme URI:    http://localhost/wp/Gentleman-Trend/
+ Description:  Storefront Child Theme
+ Author:       Pontus Pettersson
+ Author URI:   http://example.com
+ Template:     storefront
+ Version:      1.0.0
+ License:      GNU General Public License v2 or later
+ License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+ Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
+ Text Domain:  storefront-child
+*/
+
+/*-- Theme Items --*/
+    /*--
+        #464646: Dark grey
+        #eeb04d: Orange
+        #000: Black
+        #fff: White
+        #acacac: Text Color under search bar
+        Fonts: Calibri Italic
+    */
+
+/*-- Main Styles For storefront --*/
+body {
+    font-family: Calibri Italic;
+
+}
+/*-- Header --*/
+.site-header, .header-widget-region .widget, header ul, header p {
+    padding: 0;
+    margin: 0;
+}
+
+#custom_html-2 ul li {
+    display: inline-block;
+    min-width: 250px;
+}
+
+#custom_html-2 ul li p {
+    text-align: center;
+    padding: 15px 0;
+    display: block;
+    cursor: pointer;
+    color: #fff;
+    border-right: 1px solid #fff;
+    font-size: 16px;
+}
+
+#custom_html-2 {
+    background: #464646;
+}
