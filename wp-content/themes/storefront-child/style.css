@@ -25,7 +25,7 @@
 /*-- Main Styles For storefront --*/
 body {
     font-family: Calibri Italic;
-
+    background-color: #f7f7f8 !important;
 }
 /*-- Header --*/
 .site-header, .header-widget-region .widget, header ul, header p {
@@ -50,4 +50,9 @@ body {
 
 #custom_html-2 {
     background: #464646;
+}
+
+.site-header
+{
+    background-color:#fff;
 }
