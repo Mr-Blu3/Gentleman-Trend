@@ -73,7 +73,7 @@ class Klarna_Checkout_For_WooCommerce_API_Callbacks {
 
 		$orders = get_posts( $query_args );
 
-		// If zero matching orders were found, return.
+		// If zero matching orders were found, create backup order.
 		if ( empty( $orders ) ) {
 			// Backup order creation.
 			$this->backup_order_creation( $klarna_order_id );
@@ -84,32 +84,38 @@ class Klarna_Checkout_For_WooCommerce_API_Callbacks {
 		$order    = wc_get_order( $order_id );
 
 		if ( $order ) {
-			// If the order was already created, send merchant reference.
-			$response     = KCO_WC()->api->request_post_get_order( $klarna_order_id );
-			$klarna_order = json_decode( $response['body'] );
-			krokedil_log_events( $order_id, 'Klarna push callback data', $klarna_order );
+			// The order was already created. Check if order status was set (in thankyou page).
+			if ( ! $order->has_status( array( 'on-hold', 'processing', 'completed' ) ) ) {
+			
+				$response     = KCO_WC()->api->request_post_get_order( $klarna_order_id );
+				$klarna_order = json_decode( $response['body'] );
+				krokedil_log_events( $order_id, 'Klarna push callback. Updating order status.', $klarna_order );
 
-			if ( 'ACCEPTED' === $klarna_order->fraud_status ) {
-				$order->payment_complete( $klarna_order_id );
-				// translators: Klarna order ID.
-				$note = sprintf( __( 'Payment via Klarna Checkout, order ID: %s', 'klarna-checkout-for-woocommerce' ), sanitize_key( $klarna_order->order_id ) );
-				$order->add_order_note( $note );
-			} elseif ( 'REJECTED' === $klarna_order->fraud_status ) {
-				$order->update_status( 'on-hold', __( 'Klarna Checkout order was rejected.', 'klarna-checkout-for-woocommerce' ) );
-			} elseif ( 'PENDING' === $klarna_order->fraud_status ) {
-				// translators: Klarna order ID.
-				$note = sprintf( __( 'Klarna order is under review, order ID: %s.', 'klarna-checkout-for-woocommerce' ), sanitize_key( $klarna_order->order_id ) );
-				$order->update_status( 'on-hold', $note );
+				if ( 'ACCEPTED' === $klarna_order->fraud_status ) {
+					$order->payment_complete( $klarna_order_id );
+					// translators: Klarna order ID.
+					$note = sprintf( __( 'Payment via Klarna Checkout, order ID: %s', 'klarna-checkout-for-woocommerce' ), sanitize_key( $klarna_order->order_id ) );
+					$order->add_order_note( $note );
+				} elseif ( 'REJECTED' === $klarna_order->fraud_status ) {
+					$order->update_status( 'on-hold', __( 'Klarna Checkout order was rejected.', 'klarna-checkout-for-woocommerce' ) );
+				} elseif ( 'PENDING' === $klarna_order->fraud_status ) {
+					// translators: Klarna order ID.
+					$note = sprintf( __( 'Klarna order is under review, order ID: %s.', 'klarna-checkout-for-woocommerce' ), sanitize_key( $klarna_order->order_id ) );
+					$order->update_status( 'on-hold', $note );
+				}
+				KCO_WC()->api->request_post_acknowledge_order( $klarna_order_id );
+				KCO_WC()->api->request_post_set_merchant_reference(
+					$klarna_order_id,
+					array(
+						'merchant_reference1' => $order->get_order_number(),
+						'merchant_reference2' => $order->get_id(),
+					)
+				);
+
+			} else {
+				krokedil_log_events( $order_id, 'Klarna push callback. Order status already set to On hold/Processing/Completed.', $klarna_order );
 			}
 
-			KCO_WC()->api->request_post_acknowledge_order( $klarna_order_id );
-			KCO_WC()->api->request_post_set_merchant_reference(
-				$klarna_order_id,
-				array(
-					'merchant_reference1' => $order->get_order_number(),
-					'merchant_reference2' => $order->get_id(),
-				)
-			);
 		} else {
 			// Backup order creation.
 			$this->backup_order_creation( $klarna_order_id );
@@ -184,6 +190,17 @@ class Klarna_Checkout_For_WooCommerce_API_Callbacks {
 		$all_in_stock    = true;
 		$shipping_chosen = false;
 
+		$form_data = get_transient( $data['order_id'] );
+		$has_required_data = true;
+		$failed_required_check = array();
+		foreach ( $form_data as $form_row ) {
+			if ( isset( $form_row['required'] ) && '' === $form_row['value'] ) {
+				$has_required_data = false;
+				wc_add_notice( 'test', 'error' );
+				$failed_required_check[] = $form_row['name'];
+			}
+		}
+
 		// Check stock for each item and shipping method.
 		$cart_items = $data['order_lines'];
 
@@ -200,6 +217,9 @@ class Klarna_Checkout_For_WooCommerce_API_Callbacks {
 					if ( ! $cart_item_product->has_enough_stock( $cart_item['quantity'] ) ) {
 						$all_in_stock = false;
 					}
+					if( ! $cart_item_product->is_virtual() ) {
+						$needs_shipping = true;
+					}
 				}
 			} elseif ( 'shipping_fee' === $cart_item['type'] ) {
 				$shipping_chosen = true;
@@ -207,20 +227,19 @@ class Klarna_Checkout_For_WooCommerce_API_Callbacks {
 		}
 
 		do_action( 'kco_validate_checkout', $data, $all_in_stock, $shipping_chosen );
-
-		if ( $all_in_stock && $shipping_chosen ) {
+		if ( $all_in_stock && $shipping_chosen && $has_required_data ) {
 			header( 'HTTP/1.0 200 OK' );
 		} else {
 			header( 'HTTP/1.0 303 See Other' );
-
 			if ( ! $all_in_stock ) {
 				$logger = new WC_Logger();
 				$logger->add( 'klarna-checkout-for-woocommerce', 'Stock validation failed for SKU ' . $cart_item['reference'] );
 				header( 'Location: ' . wc_get_cart_url() . '?stock_validate_failed' );
-			} elseif ( ! $shipping_chosen ) {
+			} elseif ( ! $shipping_chosen && $needs_shipping ) {
 				header( 'Location: ' . wc_get_checkout_url() . '?no_shipping' );
-			} elseif ( $email_exists ) {
-				header( 'Location: ' . wc_get_checkout_url() . '?login_required=yes' );
+			} elseif ( ! $has_required_data ) {
+				$validation_hash = base64_encode( json_encode( $failed_required_check ) );
+				header( 'Location: ' . wc_get_checkout_url() . '?required_fields=' . $validation_hash );
 			}
 		}
 	}
@@ -409,17 +428,16 @@ class Klarna_Checkout_For_WooCommerce_API_Callbacks {
 
 			if ( 'ACCEPTED' === $klarna_order->fraud_status ) {
 				$order->payment_complete( $klarna_order->order_id );
-				// translators: Klarna Order ID.
-				$note = sprintf( __( 'Order created via Klarna Checkout API Callback. Please verify the order in Klarnas system. Klarna order ID: %s.', 'klarna-checkout-for-woocommerce' ), sanitize_key( $klarna_order->order_id ) );
+				// translators: Klarna order ID.
+				$note = sprintf( __( 'Payment via Klarna Checkout, order ID: %s', 'klarna-checkout-for-woocommerce' ), sanitize_key( $klarna_order->order_id ) );
 				$order->add_order_note( $note );
 			} elseif ( 'REJECTED' === $klarna_order->fraud_status ) {
-				$order->update_status( 'on-hold', __( 'Order created via Klarna Checkout API Callback. Klarna Checkout order was rejected. Klarna order ID: ' . $klarna_order->order_id, 'klarna-checkout-for-woocommerce' ) );
+				$order->update_status( 'on-hold', __( 'Klarna Checkout order was rejected.', 'klarna-checkout-for-woocommerce' ) );
+			} elseif ( 'PENDING' === $klarna_order->fraud_status ) {
+				// translators: Klarna order ID.
+				$note = sprintf( __( 'Klarna order is under review, order ID: %s.', 'klarna-checkout-for-woocommerce' ), sanitize_key( $klarna_order->order_id ) );
+				$order->update_status( 'on-hold', $note );
 			}
-
-			if ( (int) round( $order->get_total() * 100 ) !== (int) $klarna_order->order_amount ) {
-				$order->update_status( 'on-hold',  sprintf(__( 'Order needs manual review, WooCommerce total and Klarna total do not match. Klarna order total: %s.', 'klarna-checkout-for-woocommerce' ), $klarna_order->order_amount ) );
-			}
-
 			KCO_WC()->api->request_post_acknowledge_order( $klarna_order->order_id );
 			KCO_WC()->api->request_post_set_merchant_reference(
 				$klarna_order->order_id,
@@ -428,6 +446,11 @@ class Klarna_Checkout_For_WooCommerce_API_Callbacks {
 					'merchant_reference2' => $order->get_id(),
 				)
 			);
+
+			if ( (int) round( $order->get_total() * 100 ) !== (int) $klarna_order->order_amount ) {
+				$order->update_status( 'on-hold',  sprintf(__( 'Order needs manual review, WooCommerce total and Klarna total do not match. Klarna order total: %s.', 'klarna-checkout-for-woocommerce' ), $klarna_order->order_amount ) );
+			}
+
 		} catch ( Exception $e ) {
 			$logger = new WC_Logger();
 			$logger->add( 'klarna-checkout-for-woocommerce', 'Backup order creation error: ' . $e->getCode() . ' - ' . $e->getMessage() );

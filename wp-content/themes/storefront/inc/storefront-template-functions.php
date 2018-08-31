@@ -161,7 +161,9 @@ if ( ! function_exists( 'storefront_site_branding' ) ) {
 	function storefront_site_branding() {
 		?>
 		<div class="site-branding">
-			<?php storefront_site_title_or_logo(); ?>
+			<?php storefront_site_title_or_logo();
+            storefront_product_search();
+			?>
 		</div>
 		<?php
 	}

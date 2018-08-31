@@ -21,8 +21,82 @@ class FLBuilderUISettingsForms {
 	 * @return void
 	 */
 	static public function init() {
+		add_action( 'wp', __CLASS__ . '::render_settings_config' );
+		add_action( 'wp_enqueue_scripts', __CLASS__ . '::enqueue_settings_config', 11 );
 		add_action( 'wp_footer', __CLASS__ . '::init_js_config', 1 );
 		add_action( 'wp_footer', __CLASS__ . '::render_js_templates', 11 );
+	}
+
+	/**
+	 * Adds an inline script for general settings config and
+	 * one for module settings config.
+	 *
+	 * @since 2.0.7
+	 * @return void
+	 */
+	static public function enqueue_settings_config() {
+		global $wp_the_query;
+
+		if ( FLBuilderModel::is_builder_active() ) {
+
+			$url     = FLBuilderModel::get_edit_url( $wp_the_query->post->ID ) . '&fl_builder_load_settings_config';
+			$script  = 'var s = document.createElement("script");s.type = "text/javascript";s.src = "%s";document.head.appendChild(s);';
+			$config  = sprintf( $script, $url );
+			$modules = sprintf( $script, $url . '=modules' );
+
+			wp_add_inline_script( 'fl-builder', $config );
+			wp_add_inline_script( 'fl-builder-min', $config );
+			wp_add_inline_script( 'fl-builder', $modules );
+			wp_add_inline_script( 'fl-builder-min', $modules );
+		}
+	}
+
+	/**
+	 * Renders the JS config for settings forms for the current page if requested
+	 * and dies early so it can be loaded from a script tag.
+	 *
+	 * @since 2.0.7
+	 * @return void
+	 */
+	static public function render_settings_config() {
+		if ( FLBuilderModel::is_builder_active() && isset( $_GET['fl_builder_load_settings_config'] ) ) {
+
+			$type = sanitize_key( $_GET['fl_builder_load_settings_config'] );
+			$handler = 'FLBuilderUISettingsForms::compress_settings_config';
+
+			if ( 'modules' === $type ) {
+				$settings = FLBuilderUISettingsForms::get_modules_js_config();
+			} else {
+				$settings = FLBuilderUISettingsForms::get_js_config();
+			}
+
+			if ( @ini_get( 'zlib.output_compression' ) ) { // @codingStandardsIgnoreLine
+				@ini_set( 'zlib.output_compression', 'Off' ); // @codingStandardsIgnoreLine
+				$handler = null;
+			}
+			header( 'Content-Type: application/javascript' );
+
+			ob_start( $handler );
+			include FL_BUILDER_DIR . 'includes/ui-settings-config.php';
+			ob_end_flush();
+
+			die();
+		}
+	}
+
+	/**
+	 * Attempts to use the output buffer gzip handler to compress
+	 * the settings config. We have to do it this way to prevent
+	 * errors we were running into on some hosts.
+	 *
+	 * @since 2.1.0.2
+	 * @param string $buffer
+	 * @return string
+	 */
+
+	static public function compress_settings_config( $buffer ) {
+		@ob_gzhandler( $buffer ); // @codingStandardsIgnoreLine
+		return $buffer;
 	}
 
 	/**
@@ -37,10 +111,12 @@ class FLBuilderUISettingsForms {
 	 */
 	static public function init_js_config() {
 		self::get_js_config();
+		self::get_modules_js_config();
 	}
 
 	/**
-	 * Returns _all_ JS config for settings forms.
+	 * Returns the JS config for all settings forms except
+	 * modules which are loaded in a separate request.
 	 *
 	 * @since 2.0
 	 * @return array
@@ -48,7 +124,7 @@ class FLBuilderUISettingsForms {
 	static public function get_js_config() {
 		return array(
 			'forms'   		=> self::prep_forms_for_js_config( FLBuilderModel::$settings_forms ),
-			'modules' 		=> self::prep_module_forms_for_js_config(),
+			'editables'   	=> self::prep_editables_for_js_config(),
 			'nodes'  		=> self::prep_node_settings_for_js_config(),
 			'attachments'   => self::prep_attachments_for_js_config(),
 			'settings'		=> array(
@@ -61,6 +137,18 @@ class FLBuilderUISettingsForms {
 				'modules'		=> FLBuilderModel::get_module_defaults(),
 				'forms'   		=> self::prep_form_defaults_for_js_config( FLBuilderModel::$settings_forms ),
 			),
+		);
+	}
+
+	/**
+	 * Returns the JS config for all modules.
+	 *
+	 * @since 2.0.7
+	 * @return array
+	 */
+	static public function get_modules_js_config() {
+		return array(
+			'modules' => self::prep_module_forms_for_js_config(),
 		);
 	}
 
@@ -141,11 +229,11 @@ class FLBuilderUISettingsForms {
 					}
 
 					foreach ( $section['fields'] as $field_key => &$field ) {
-						self::prep_field_for_js_config( $field );
+						self::prep_field_for_js_config( $field, $field_key, $form_key );
 					}
 				}
 			}
-		}// End foreach().
+		}
 
 		return $forms;
 	}
@@ -155,9 +243,20 @@ class FLBuilderUISettingsForms {
 	 *
 	 * @since 2.0
 	 * @param array $field
+	 * @param string $field_key
+	 * @param string $form_key
 	 * @return void
 	 */
-	static private function prep_field_for_js_config( &$field ) {
+	static private function prep_field_for_js_config( &$field, $field_key = '', $form_key = '' ) {
+
+		/**
+		 * This filter hook replaces pre-2.0 `fl_builder_render_settings_field` one.
+		 *
+		 * @param  array  $field      An array of setup data for the field.
+		 * @param  string $field_key  The field name/key.
+		 * @param  string $form_key   Module/form key.
+		 */
+		$field = apply_filters( 'fl_builder_field_js_config', $field, $field_key, $form_key );
 
 		// Convert class to className for JS compat.
 		if ( isset( $field['class'] ) ) {
@@ -207,6 +306,53 @@ class FLBuilderUISettingsForms {
 		}
 
 		return self::prep_forms_for_js_config( $module_forms );
+	}
+
+	/**
+	 * Gathers and prepares inline module editing data for the JS config.
+	 *
+	 * @since 2.1
+	 * @return array
+	 */
+	static public function prep_editables_for_js_config() {
+		$editables = array();
+
+		foreach ( FLBuilderModel::$modules as $module ) {
+			$fields = FLBuilderModel::get_settings_form_fields( $module->form );
+
+			foreach ( $fields as $key => $field ) {
+
+				if ( 'code' === $field['type'] ) {
+					continue;
+				}
+
+				if ( ! isset( $field['preview'] ) ) {
+					continue;
+				}
+
+				if ( ! isset( $field['preview']['type'] ) || 'text' !== $field['preview']['type'] ) {
+					continue;
+				}
+
+				if ( ! isset( $field['preview']['selector'] ) ) {
+					continue;
+				}
+
+				if ( ! isset( $editables[ $module->slug ] ) ) {
+					$editables[ $module->slug ] = array();
+				}
+
+				$editables[ $module->slug ][ $key ] = array(
+					'selector' => $field['preview']['selector'],
+					'field'	   => array(
+						'name'		=> $key,
+						'type'		=> $field['type'],
+					),
+				);
+			}
+		}
+
+		return $editables;
 	}
 
 	/**
@@ -288,7 +434,7 @@ class FLBuilderUISettingsForms {
 					}
 				}
 			}
-		}// End foreach().
+		}
 
 		return $attachments;
 	}
@@ -499,19 +645,37 @@ class FLBuilderUISettingsForms {
 			}
 
 			$value = isset( $settings->$name ) ? $settings->$name : '';
+			$is_multiple = isset( $field['multiple'] ) ? $field['multiple'] : false;
 
-			ob_start();
-			do_action( 'fl_builder_before_control', $name, $value, $field, $settings );
-			do_action( 'fl_builder_before_control_' . $field['type'], $name, $value, $field, $settings );
-			$before = ob_get_clean();
+			if ( $is_multiple ) {
+				$before = array();
+				$after = array();
+				foreach ( $value as $repeater_item_value ) {
+					ob_start();
+					do_action( 'fl_builder_before_control', $name, $repeater_item_value, $field, $settings );
+					do_action( 'fl_builder_before_control_' . $field['type'], $name, $value, $field, $settings );
+					$before[] = ob_get_clean();
 
-			ob_start();
-			do_action( 'fl_builder_after_control_' . $field['type'], $name, $value, $field, $settings );
-			do_action( 'fl_builder_after_control', $name, $value, $field, $settings );
-			$after = ob_get_clean();
+					ob_start();
+					do_action( 'fl_builder_after_control_' . $field['type'], $name, $value, $field, $settings );
+					do_action( 'fl_builder_after_control', $name, $repeater_item_value, $field, $settings );
+					$after[] = ob_get_clean();
+				}
+			} else {
+				ob_start();
+				do_action( 'fl_builder_before_control', $name, $value, $field, $settings );
+				do_action( 'fl_builder_before_control_' . $field['type'], $name, $value, $field, $settings );
+				$before = ob_get_clean();
+
+				ob_start();
+				do_action( 'fl_builder_after_control_' . $field['type'], $name, $value, $field, $settings );
+				do_action( 'fl_builder_after_control', $name, $value, $field, $settings );
+				$after = ob_get_clean();
+			}
 
 			if ( ! empty( $before ) || ! empty( $after ) ) {
 				$response['extras'][ $name ] = array(
+					'multiple' => $is_multiple,
 					'before' => $before,
 					'after'  => $after,
 				);
@@ -642,6 +806,12 @@ class FLBuilderUISettingsForms {
 	 */
 	static public function render_settings_field( $name, $field, $settings = null ) {
 
+		/**
+		 * Use this filter to modify the config array for a field before it is rendered.
+		 * @see fl_builder_render_settings_field
+		 * @link https://kb.wpbeaverbuilder.com/article/117-plugin-filter-reference
+		 * @since 2.0
+		 */
 		$field              = apply_filters( 'fl_builder_render_settings_field', $field, $name, $settings ); // Allow field settings filtering first
 		$i                  = null;
 		$is_multiple        = isset( $field['multiple'] ) && true === (bool) $field['multiple'];
@@ -688,9 +858,9 @@ class FLBuilderUISettingsForms {
 					echo '<tr class="fl-builder-field-multiple" data-field="' . $arr_name . '">';
 					include FL_BUILDER_DIR . 'includes/ui-legacy-custom-field.php';
 					echo '<td class="fl-builder-field-actions">';
-					echo '<i class="fl-builder-field-move fa fa-arrows"></i>';
-					echo '<i class="fl-builder-field-copy fa fa-copy"></i>';
-					echo '<i class="fl-builder-field-delete fa fa-times"></i>';
+					echo '<i class="fl-builder-field-move fas fa-arrows-alt"></i>';
+					echo '<i class="fl-builder-field-copy far fa-copy"></i>';
+					echo '<i class="fl-builder-field-delete fas fa-times"></i>';
 					echo '</td>';
 					echo '</tr>';
 				}
@@ -711,9 +881,9 @@ class FLBuilderUISettingsForms {
 				echo '<tr id="fl-field-' . $name . '" class="fl-field' . $row_class . '" data-type="' . $field['type'] . '" data-preview=\'' . $preview . '\'>';
 				include FL_BUILDER_DIR . 'includes/ui-legacy-custom-field.php';
 				echo '</tr>';
-			}// End if().
-		}// End if().
-	}// End if().
+			}
+		}
+	}
 
 	/**
 	 * Renders the markup for the icon selector.

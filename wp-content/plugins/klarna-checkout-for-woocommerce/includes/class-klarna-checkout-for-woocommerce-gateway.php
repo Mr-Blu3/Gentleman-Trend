@@ -50,6 +50,17 @@ class Klarna_Checkout_For_WooCommerce_Gateway extends WC_Payment_Gateway {
 	}
 
 	/**
+	 * Get gateway icon.
+	 *
+	 * @return string
+	 */
+	public function get_icon() {
+		$icon_src   = 'https://cdn.klarna.com/1.0/shared/image/generic/logo/en_us/basic/logo_black.png?width=100';
+		$icon_html  = '<img src="' . $icon_src . '" alt="Klarna Checkout" style="border-radius:0px"/>';
+		return apply_filters( 'wc_klarna_checkout_icon_html', $icon_html );
+	}
+
+	/**
 	 * Process the payment and return the result.
 	 *
 	 * @param  int $order_id WooCommerce order ID.
@@ -134,7 +145,6 @@ class Klarna_Checkout_For_WooCommerce_Gateway extends WC_Payment_Gateway {
 		if ( ! kco_wc_prefill_allowed() ) {
 			add_thickbox();
 		}
-
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		wp_register_script(
@@ -152,6 +162,13 @@ class Klarna_Checkout_For_WooCommerce_Gateway extends WC_Payment_Gateway {
 			KCO_WC_VERSION
 		);
 
+		$form = array();
+		if ( false !== get_transient( WC()->session->get( 'kco_wc_order_id' ) ) ) {
+			$form = get_transient( WC()->session->get( 'kco_wc_order_id' ) );
+		}
+
+		$standard_woo_checkout_fields = array('billing_first_name', 'billing_last_name', 'billing_address_1', 'billing_address_2', 'billing_postcode', 'billing_city', 'billing_phone', 'billing_email', 'shipping_first_name', 'shipping_last_name', 'shipping_address_1', 'shipping_address_2', 'shipping_postcode', 'shipping_city', 'terms', 'account_username', 'account_password');
+		
 		$checkout_localize_params = array(
 			'update_cart_url'                      => WC_AJAX::get_endpoint( 'kco_wc_update_cart' ),
 			'update_cart_nonce'                    => wp_create_nonce( 'kco_wc_update_cart' ),
@@ -168,6 +185,10 @@ class Klarna_Checkout_For_WooCommerce_Gateway extends WC_Payment_Gateway {
 			'checkout_error_url'                   => WC_AJAX::get_endpoint( 'kco_wc_checkout_error' ),
 			'checkout_error_nonce'                 => wp_create_nonce( 'kco_wc_checkout_error' ),
 			'logging'                              => $this->logging,
+			'save_form_data'                       => WC_AJAX::get_endpoint( 'kco_wc_save_form_data' ),
+			'save_form_data_nonce'                 => wp_create_nonce( 'kco_wc_save_form_data' ),
+			'form'                                 => $form,
+			'standard_woo_checkout_fields'		   => $standard_woo_checkout_fields,
 		);
 
 		wp_localize_script( 'kco', 'kco_params', $checkout_localize_params );
@@ -193,10 +214,45 @@ class Klarna_Checkout_For_WooCommerce_Gateway extends WC_Payment_Gateway {
 			return;
 		}
 
-		wp_enqueue_script(
-			'klarna_payments_admin',
-			plugins_url( 'assets/js/klarna-checkout-for-woocommerce-admin.js', KCO_WC_MAIN_FILE )
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$store_base_location = wc_get_base_location();
+		if ( 'US' === $store_base_location['country'] ) {
+			$location = 'US';
+		} else {
+			$location = $this->check_if_eu( $store_base_location['country'] );
+		}
+
+		wp_register_script(
+			'kco_admin',
+			plugins_url( 'assets/js/klarna-checkout-for-woocommerce-admin.js', KCO_WC_MAIN_FILE ),
+			array(),
+			KCO_WC_VERSION
 		);
+		$admin_localize_params = array(
+			'location' => $location,
+		);
+		wp_localize_script( 'kco_admin', 'kco_admin_params', $admin_localize_params );
+		wp_enqueue_script( 'kco_admin' );
+	}
+
+	/**
+	 * Detect if EU country.
+	 *
+	 * @param string $store_base_location The WooCommerce stores base country.
+	 */
+	private function check_if_eu( $store_base_location ) {
+		$eu_countries = array(
+			'AL', 'AD', 'AM', 'AT', 'BY', 'BE', 'BA', 'BG', 'CH', 'CY', 'CZ', 'DE',
+			'DK', 'EE', 'ES', 'FO', 'FI', 'FR', 'GB', 'GE', 'GI', 'GR', 'HU', 'HR',
+			'IE', 'IS', 'IT', 'LT', 'LU', 'LV', 'MC', 'MK', 'MT', 'NO', 'NL', 'PL',
+			'PT', 'RO', 'RU', 'SE', 'SI', 'SK', 'SM', 'TR', 'UA', 'VA',
+		);
+
+		if( in_array( $store_base_location, $eu_countries ) ) {
+			return 'EU';
+		} else {
+			return '';
+		}
 	}
 
 	/**
@@ -224,6 +280,35 @@ class Klarna_Checkout_For_WooCommerce_Gateway extends WC_Payment_Gateway {
 
 			$klarna_country = WC()->checkout()->get_value( 'billing_country' );
 			update_post_meta( $order_id, '_wc_klarna_country', $klarna_country );
+
+			$response     		= KCO_WC()->api->request_post_get_order( $klarna_order->order_id );
+			$klarna_post_order 	= json_decode( $response['body'] );
+
+			// Remove html_snippet from what we're logging
+			$log_order = clone $klarna_post_order;
+			$log_order->html_snippet = '';
+			krokedil_log_events( $order_id, 'Klarna post_order in show_thank_you_snippet', $log_order );
+			
+			if ( 'ACCEPTED' === $klarna_post_order->fraud_status ) {
+				$order->payment_complete();
+				// translators: Klarna order ID.
+				$note = sprintf( __( 'Payment via Klarna Checkout, order ID: %s', 'klarna-checkout-for-woocommerce' ), sanitize_key( $klarna_order->order_id ) );
+				$order->add_order_note( $note );
+			} elseif ( 'REJECTED' === $klarna_post_order->fraud_status ) {
+				$order->update_status( 'on-hold', __( 'Klarna Checkout order was rejected.', 'klarna-checkout-for-woocommerce' ) );
+			} elseif ( 'PENDING' === $klarna_post_order->fraud_status ) {
+				// translators: Klarna order ID.
+				$note = sprintf( __( 'Klarna order is under review, order ID: %s.', 'klarna-checkout-for-woocommerce' ), sanitize_key( $klarna_order->order_id ) );
+				$order->update_status( 'on-hold', $note );
+			}
+			KCO_WC()->api->request_post_acknowledge_order( $klarna_order->order_id );
+			KCO_WC()->api->request_post_set_merchant_reference(
+				$klarna_order->order_id,
+				array(
+					'merchant_reference1' => $order->get_order_number(),
+					'merchant_reference2' => $order->get_id(),
+				)
+			);
 		}
 	}
 

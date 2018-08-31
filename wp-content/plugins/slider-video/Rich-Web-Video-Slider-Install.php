@@ -27,6 +27,10 @@
 	$table_name13_Loader = $wpdb->prefix . "rich_web_vs_effect_9_loader";
 	$table_name14_Loader = $wpdb->prefix . "rich_web_vs_effect_10_loader";
 
+	
+
+
+
 	$sql  = 'CREATE TABLE IF NOT EXISTS ' .$table_name .' ( id INTEGER(10) UNSIGNED AUTO_INCREMENT, Font_family VARCHAR(255) NOT NULL, PRIMARY KEY (id))';
 	$sql1 = 'CREATE TABLE IF NOT EXISTS ' .$table_name1 . '( id INTEGER(10) UNSIGNED AUTO_INCREMENT, Slider_ID INTEGER(10) NOT NULL, PRIMARY KEY (id))';
 	$sql2 = 'CREATE TABLE IF NOT EXISTS ' .$table_name2 . '( id INTEGER(10) UNSIGNED AUTO_INCREMENT, Slider_Title VARCHAR(255) NOT NULL, Slider_Type VARCHAR(255) NOT NULL, Slider_Video_Quantity INTEGER(10) NOT NULL, PRIMARY KEY (id))';		

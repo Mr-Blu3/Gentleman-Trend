@@ -128,7 +128,7 @@ class Klarna_Checkout_For_WooCommerce_Order_Lines {
 	 * Process WooCommerce shipping to Klarna Payments order lines.
 	 */
 	public function process_shipping() {
-		if ( WC()->shipping->get_packages() && WC()->session->get( 'chosen_shipping_methods' ) ) {
+		if ( WC()->shipping->get_packages() && WC()->session->get( 'chosen_shipping_methods' )[0] ) {
 			$shipping            = array(
 				'type'             => 'shipping_fee',
 				'reference'        => $this->get_shipping_reference(),
@@ -239,7 +239,7 @@ class Klarna_Checkout_For_WooCommerce_Order_Lines {
 
 				// Add separate discount line item, but only if it's a smart coupon or country is US.
 				$fee_item = array(
-					'type'                  => 'shipping_fee',
+					'type'                  => 'surcharge',
 					'reference'             => $fee->id,
 					'name'                  => $fee->name,
 					'quantity'              => 1,
@@ -437,7 +437,7 @@ class Klarna_Checkout_For_WooCommerce_Order_Lines {
 		$image_url = false;
 		if ( $product->get_image_id() > 0 ) {
 			$image_id  = $product->get_image_id();
-			$image_url = wp_get_attachment_image_url( $image_id, 'shop_thumbnail', false );
+			$image_url = wp_get_attachment_image_url( $image_id, 'shop_single', false );
 		}
 
 		return $image_url;

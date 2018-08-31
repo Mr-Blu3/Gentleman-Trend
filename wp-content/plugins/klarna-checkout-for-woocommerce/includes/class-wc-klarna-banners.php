@@ -15,6 +15,8 @@ if ( ! class_exists( 'WC_Klarna_Banners' ) ) {
 		public function __construct() {
 			add_action( 'in_admin_header', array( $this, 'klarna_banner' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'load_admin_css' ) );
+			add_action( 'wp_ajax_hide_klarna_banner', array( $this, 'hide_klarna_banner' ) );
+			add_action( 'wp_ajax_nopriv_hide_klarna_banner', array( $this, 'hide_klarna_banner' ) );
 		}
 
 		/**
@@ -24,7 +26,7 @@ if ( ! class_exists( 'WC_Klarna_Banners' ) ) {
 		public function load_admin_css() {
 			wp_enqueue_style(
 				'klarna_payments_admin',
-				plugins_url( 'assets/css/klarna-checkout-admin.css?v=120320182110', KCO_WC_MAIN_FILE )
+				plugins_url( 'assets/css/klarna-checkout-admin.css?v=120320182113', KCO_WC_MAIN_FILE )
 			);
 		}
 
@@ -53,7 +55,7 @@ if ( ! class_exists( 'WC_Klarna_Banners' ) ) {
 				$show_banner = true;
 			}
 
-			if ( $show_banner ) {
+			if ( $show_banner && false === get_transient( 'klarna_hide_banner' ) ) {
 				?>
 				<div id="kb-spacer"></div>
 				<div id="klarna-banner">
@@ -61,8 +63,8 @@ if ( ! class_exists( 'WC_Klarna_Banners' ) ) {
 						<h1>Go live</h1>
 						<p>Before you can start to sell with Klarna you need your store to be approved by Klarna. When the installation is done and you are ready to go live, Klarna will need to verify the integration. Then you can go live with your store! If you wish to switch Klarna products then you’ll need the Klarna team to approve your store again.</p>
 						<a class="kb-button"
-						   href="https://www.klarna.com/international/business/woocommerce/?utm_source=woo-backend&utm_medium=referral&utm_campaign=woo&utm_content=banner"
-						   target="_blank">Go live with Klarna</a>
+							href="<?php echo self::get_go_live_url(); ?>"
+							target="_blank">Go live with Klarna</a>
 					</div>
 					<div id="kb-right">
 						<h1>Currently using Klarna?</h1>
@@ -74,7 +76,29 @@ if ( ! class_exists( 'WC_Klarna_Banners' ) ) {
 					<img id="kb-image"
 						 src="<?php echo esc_url( KCO_WC_PLUGIN_URL ); ?>/assets/img/klarna_logo_white.png"
 						 alt="Klarna logo" width="110"/>
+						 <span class="kb-dismiss dashicons dashicons-dismiss"></span>
 				</div>
+				<script type="text/javascript">
+		
+				jQuery(document).ready(function($){
+	
+					jQuery('.kb-dismiss').click(function(){
+						jQuery('#klarna-banner').slideUp();
+						jQuery.post(
+							ajaxurl,
+							{
+								action		: 'hide_klarna_banner',
+								_wpnonce	: '<?php echo wp_create_nonce('hide-klarna-banner'); ?>',
+							},
+							function(response){
+								console.log('Success hide kco banner');
+								
+							}
+						);
+										
+					});
+				});
+				</script>
 				<?php
 			}
 		}
@@ -97,7 +121,7 @@ if ( ! class_exists( 'WC_Klarna_Banners' ) ) {
 						<h3>Go live</h3>
 						<p>Before you can start to sell with Klarna you need your store to be approved by Klarna. When the installation is done and you are ready to go live, Klarna will need to verify the integration. Then you can go live with your store! If you wish to switch Klarna products then you’ll need the Klarna team to approve your store again.</p>
 						<a class="kb-button"
-						   href="https://www.klarna.com/international/business/woocommerce/?utm_source=woo-backend&utm_medium=referral&utm_campaign=woo&utm_content=kco"
+							href="<?php echo self::get_go_live_url(); ?>"
 						   target="_blank">Go live with Klarna</a>
 					</div>
 
@@ -116,6 +140,37 @@ if ( ! class_exists( 'WC_Klarna_Banners' ) ) {
 			</div>
 
 			<?php
+		}
+
+		/**
+		 * Hide Klarna banner in admin pages for.
+		 */
+		public function hide_klarna_banner() {
+			set_transient( 'klarna_hide_banner', '1', 5 * DAY_IN_SECONDS );
+			wp_send_json_success( 'Hide Klarna banner.' );
+			wp_die();
+		}
+
+		/**
+		 * Return correct Go live url depending on the store country.
+		 */
+		public static function get_go_live_url() {
+			// Set args for the URL
+			$country        = wc_get_base_location()['country'];
+			$plugin         = 'klarna-checkout-for-woocommerce';
+			$plugin_version = KCO_WC_VERSION;
+			$wc_version     = defined( 'WC_VERSION' ) && WC_VERSION ? WC_VERSION : null;
+			$url_queries    = '?country='. $country .'&products=kco&plugin=' . $plugin . '&pluginVersion=' . $plugin_version . '&platform=woocommerce&platformVersion=' . $wc_version;
+
+			if ( 'US' !== $country ) {
+				$url_base = 'https://eu.portal.klarna.com/signup/';
+				$url = $url_base . $url_queries;
+			} else {
+				//$url_base = 'https://us.portal.klarna.com/signup/';
+				$url = 'https://www.klarna.com/international/business/woocommerce/?utm_source=woo-backend&utm_medium=referral&utm_campaign=woo&utm_content=banner';
+			}
+
+			return $url;
 		}
 	}
 

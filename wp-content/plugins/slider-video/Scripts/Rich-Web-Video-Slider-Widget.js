@@ -15,5 +15,3 @@ function RIch_Web_SVS_Close_Video(VSlider_ID)
 	jQuery('.RichWeb_SVS_'+VSlider_ID+' iframe').attr('src','');
 	jQuery('.RichWeb_SVS_'+VSlider_ID+' .Rich_Web_VSlider_SVS_PlayIcon').fadeIn();
 }
-
-

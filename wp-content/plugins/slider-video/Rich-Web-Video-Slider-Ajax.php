@@ -115,11 +115,11 @@
 		$table_name12 = $wpdb->prefix . "rich_web_vs_effect_8";
 		$table_name13 = $wpdb->prefix . "rich_web_vs_effect_9";
 		$table_name14 = $wpdb->prefix . "rich_web_vs_effect_10";
-		$table_name5_Loader  = $wpdb->prefix . "rich_web_vs_effect_1_loader";
-		$table_name6_Loader  = $wpdb->prefix . "rich_web_vs_effect_2_loader";
-		$table_name7_Loader  = $wpdb->prefix . "rich_web_vs_effect_3_loader";
-		$table_name8_Loader  = $wpdb->prefix . "rich_web_vs_effect_4_loader";
-		$table_name9_Loader  = $wpdb->prefix . "rich_web_vs_effect_5_loader";
+		$table_name5_Loader = $wpdb->prefix . "rich_web_vs_effect_1_loader";
+		$table_name6_Loader = $wpdb->prefix . "rich_web_vs_effect_2_loader";
+		$table_name7_Loader = $wpdb->prefix . "rich_web_vs_effect_3_loader";
+		$table_name8_Loader = $wpdb->prefix . "rich_web_vs_effect_4_loader";
+		$table_name9_Loader = $wpdb->prefix . "rich_web_vs_effect_5_loader";
 		$table_name10_Loader = $wpdb->prefix . "rich_web_vs_effect_6_loader";
 		$table_name11_Loader = $wpdb->prefix . "rich_web_vs_effect_7_loader";
 		$table_name12_Loader = $wpdb->prefix . "rich_web_vs_effect_8_loader";

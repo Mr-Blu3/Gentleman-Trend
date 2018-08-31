@@ -1,10 +1,10 @@
 ﻿=== Video Slider - Slider Carousel ===
 Contributors: richteam
-Donate link: http://rich-web.esy.es/slider-video
+Donate link: http://rich-web.org/wp-video-slider/
 Tags: Slider, wordpress slider, image slider, Photo Slider, slider plugin, responsive slider, easy slider, post slider, video slider, youtube slider, gallery slider, images slider
 Requires at least: 4.2
 Tested up to: 4.9
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,17 +19,15 @@ https://www.youtube.com/watch?v=rG3w0Rxxnew&feature=youtu.be
 
 Video Slider plugin is a great way to create a stunning video slider without programming skills. Fully responsive, work on any mobile device. You can attract more people to your website and amaze them with effective slideshows, that show your video amazing way. It is very easy. It is necessary to select the video ( currently supports in Youtube, Vimeo, Vevo and MP4) that you would like to show in a slider using the Rich Web, wich creates a responsive slideshow, thumbnail slider or slider post feed. Plugin supports Youtube, Vimeo, Vevo and MP4 videos. It is fully responsive works on iPhone, IPAD, Android, Firefox, Chrome, Safari, Opera and Internet Explorer.
 
-### Rich Web Slider.
 
-*  [Video Slider Pro](http://rich-web.esy.es/slider-video)
-*  [Video Slider - Live - Demo](http://rich-web.esy.es/slider-video-content-slider/)
-*  [Slider FAQ](https://wordpress.org/plugins/slider-video/faq/)
-*  [Slider User Manual](https://wordpress.org/plugins/slider-video/other_notes/)
-*  [Slider Support](http://rich-web.esy.es/contact-us/)
+*  [Video Slider Pro](http://rich-web.org/wp-video-slider/)
+*  [Video Slider - Live Demo](http://rich-web.org/wp-video-slider-content/)
+*  [Video Slider Support](https://wordpress.org/support/plugin/slider-video)
 
 ### New Plugin by Rich Team
 * [WordPress Coming Soon Plugin](https://wordpress.org/plugins/coming-soons/)
-* [WordPress Event Timeline Plugin](http://rich-web.esy.es/wordpress-timeline/)
+* [WordPress Event Timeline Plugin](http://rich-web.org/wp-event-timeline/)
+
 
 * **Overlay Color** - This choise is for overlay, that appear as background for titles an descriptions on the slides.
 * **Quantity of the slides** - You can show the required number of slides in the slider, depending on, how much videos to create.
@@ -43,7 +41,6 @@ Video Slider plugin is a great way to create a stunning video slider without pro
 * **Content** - Each video has its own content. You can watch the video one after the other, where is inserted the header, description, buttons, videos and links.
 * **Pause Time** - This function is for to set the time to pause. You just have to choose the approriate time to stop the slider.
 * **The speed of change** - This option allows you to select the slide show speed that you would like to have. You just have to write the time to change the video speed.
-
 
 Imagine all of your Youtube, Vimeo, Vevo and MP4 format videos through our fantastic Video Slider Plugin. It is very easy to add video from Youtube, Vimeo, Vevo and MP4.
 
@@ -68,7 +65,7 @@ Your WordPress web-site represents you, your brand or your company. Rich Video S
 * Option for adding a deep link to a specified slide.
 * Option for create your own slide transitions.
 * Option for adding a link to layers which will change the slider to a specific slideshow.
-* Option for specifying a global background color or video to the slider.
+* Option for specifying a global background color or video.
 * Working in Chrome, Firefox, Safari, IE7-11, Opera.
 * Working in mobile browsers (Android, iOS and et.).
 * Responsive, full-width, full size or fixed dimensions layout.
@@ -82,7 +79,7 @@ Your WordPress web-site represents you, your brand or your company. Rich Video S
 * Drag and Drop functionality - Drag and drop videos to rearrange their sequence.
 * Shortcode supported.
 
-#### Pro Key Features
+[Pro Key Features](http://rich-web.org/wp-video-slider)
 
 Fully responsive & multiple layouts support.
 
@@ -92,7 +89,7 @@ Fully responsive & multiple layouts support.
 * Navigation button/bullet styles
 * Supports HTML layers.
 * SSupports Video layers.
-* 30 Transition effects for slider.
+* 30 Transition effects.
 
 = Beautiful Slideshow Effects =
 
@@ -112,33 +109,32 @@ Plugin comes with a built in theme choose which allows you to use some of the aw
 Plugin has an amazing transition effects, sequence of the other images - Fade, Cross Fade, Slide, Slideshow, Slice, Blinds, 3D, 3D Horizontal, Horizontal, Vertical, Blocks and Shuffle. Over time, will be added new effects. Effects gives to slider unique look and beautiful design. Animation options allow adding different transition effects for the responsive slideshow. Plugin will give a unique look to your videos, with its descriptions and titles, which also has their own slideshow effects.
 
 = Multiple slideshow types =
-Let you to choose which slider shape fit to your site. Currently 10 different slider types and 30+ slide effects included.
+Let you to choose which slider shape fit to your site. Currently 10 different types and 30+ slide effects included.
 							
 
 = Rich Web =
-[Video Slider Pro](http://rich-web.esy.es/slider-video/)
+[Video Slider Pro](http://rich-web.org/wp-video-slider)
 
 ### Live Demo
 
-* [Content Slider](http://rich-web.esy.es/slider-video-content-slider)
-* [Slick Slider](http://rich-web.esy.es/slider-video-slick-slider)
-* [Thumbnails](http://rich-web.esy.es/slider-video-thumbnails-slider)
-* [Carousel / Content Popup](http://rich-web.esy.es/wordpress-slider-video-carousel-content-popup)
-* [Simple Video Slider](http://rich-web.esy.es/wordpress-slider-video-simple-video-slider)
-* [Vertical Thumbnails](http://rich-web.esy.es/wordpress-slider-video-slider-video-vertical-thumbnails)
-* [Horizontal Posts Slider](http://rich-web.esy.es/wordpress-slider-video-horizontal-post-slider)
-* [Rich Slider](http://rich-web.esy.es/wordpress-rich-video-slider-1)
-* [TimeLine Slider](http://rich-web.esy.es/wordpress-timeline-video-slider-1)
-* [Amazing Simple Slider](http://rich-web.esy.es/wordpress-amazing-simple-video-slider-1)
-
+* [Content Slider](http://rich-web.org/wp-video-slider/)
+* [Slick Slider](http://rich-web.org/wp-video-slider-slick/)
+* [Thumbnails](http://rich-web.org/wp-video-slider-thumbnails/)
+* [Carousel / Content Popup](http://rich-web.org/wp-video-slider-carousel/)
+* [Simple Video Slider](http://rich-web.org/wp-video-slider-simple/)
+* [Vertical Thumbnails](http://rich-web.org/wp-video-slider-vertical-thumbnails/)
+* [Horizontal Posts Slider](http://rich-web.org/wp-video-slider-horizontal-post/)
+* [Rich Slider](http://rich-web.org/wp-video-slider-rich/)
+* [TimeLine Slider](http://rich-web.org/wp-video-slider-timeline/
+* [Amazing Simple Slider](http://rich-web.org/wp-video-slider-amazing-simple/)
 
 = Services and Support =
 
-We are committed to top-notch customer support because we know if you have problem with Video Slider, you need a solution as soon as possible.
+We are committed to top-notch customer support because we know if you have problem with video slider, you need a solution as soon as possible.
 
 ### IMPORTANT:
 
-If You think You have found a mistake in the plugin or have any problems, questions about the plugin, please read the [Support Forum](https://wordpress.org/support/plugin/slider-video) оr can you ask your question on our WordPress website. If You can not find a solution here, please feel free and click here to [Contact US](http://rich-web.esy.es/contact-us).
+If You think You have found a mistake in the plugin or have any problems, questions about the plugin, please read the [Support Forum](https://wordpress.org/support/plugin/slider-video) оr can you ask your question on our WordPress website. If You can not find a solution here, please feel free and click here to [Contact US](http://rich-web.org/contact-us).
 
 == Installation ==
 
@@ -153,11 +149,11 @@ Install the free version in your WordPress website
 
 = How can I change the width? =
 
-For change the width choose the Slider version, You will see the " width " tab, where you can choose that size, which width you want for your slider.
+For change the width choose the version, You will see the " width " tab, where you can choose that size, which width you want for your slider.
 
 = How can I change the height? =
 
-For change the, height choose your preferable version. In the options You will see the " height " tab, where you can choose the height of slider.
+For change the, height choose your preferable version. In the options You will see the " height " tab, where you can choose the height.
 
 = How to install the free version in your WordPress website? =
 
@@ -199,6 +195,14 @@ No, there are no restrictions for adding video to Youtube, Vimeo, Vevo and MP4.
 41. Horizontal Posts Slider
 
 == Changelog ==
+
+= 1.2.2 =
+
+* Added Hover effects in Carousel type.
+* Changed style for mobile devices.
+* Fixed bugs with MP4 format videos. 
+* Fixed bug with Amazing Navigation.
+* Tested with different browsers. 
 
 = 1.2.1 =
 

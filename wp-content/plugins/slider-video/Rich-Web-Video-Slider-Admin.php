@@ -79,7 +79,8 @@
 	if($Rich_Web_VS_ID) { $Rich_Web_VS_IDn = $Rich_Web_VS_ID[0]->Slider_ID; } else { $Rich_Web_VS_IDn = 0; }
 ?>
 <form method="POST" enctype="multipart/form-data">
-	<script src='<?php echo plugins_url('/Scripts/tinymce.js',__FILE__);?>'></script>
+	<script src='<?php echo plugins_url('/Scripts/tinymce.min.js',__FILE__);?>'></script>
+	<script src='<?php echo plugins_url('/Scripts/jquery.tinymce.min.js',__FILE__);?>'></script>
 	<?php wp_nonce_field( 'edit-menu_', 'Rich_Web_VSlider_Nonce' );?>
 	<?php require_once( 'Rich-Web-Video-Slider-Header.php' ); ?>
 	<?php require_once( 'Rich-Web-Video-Slider-Check.php' ); ?>

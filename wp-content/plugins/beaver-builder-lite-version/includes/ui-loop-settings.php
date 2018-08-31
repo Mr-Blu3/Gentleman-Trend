@@ -79,6 +79,7 @@ do_action( 'fl_builder_loop_settings_before_form', $settings ); // e.g Add custo
 				'meta_value_num' => __( 'Meta Value (Numeric)', 'fl-builder' ),
 				'rand'        	 => __( 'Random', 'fl-builder' ),
 				'title'          => __( 'Title', 'fl-builder' ),
+				'post__in'       => __( 'Selection Order', 'fl-builder' ),
 			),
 			'toggle'		=> array(
 				'meta_value' 	=> array(
@@ -103,6 +104,17 @@ do_action( 'fl_builder_loop_settings_before_form', $settings ); // e.g Add custo
 			'default'       => '0',
 			'size'          => '4',
 			'help'          => __( 'Skip this many posts that match the specified criteria.', 'fl-builder' ),
+		), $settings);
+
+		FLBuilder::render_settings_field('exclude_self', array(
+			'type'          => 'select',
+			'label'         => __( 'Exclude Current Post', 'fl-builder' ),
+			'default'       => 'no',
+			'help'          => __( 'Exclude the current post from the query.' ),
+			'options'       => array(
+				'yes'          => __( 'Yes', 'fl-builder' ),
+				'no'           => __( 'No', 'fl-builder' ),
+			),
 		), $settings);
 
 		?>

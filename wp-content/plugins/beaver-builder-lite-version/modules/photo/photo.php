@@ -38,6 +38,7 @@ class FLPhotoModule extends FLBuilderModule {
 		if ( $this->settings && 'lightbox' == $this->settings->link_type ) {
 			if ( ! $override_lightbox ) {
 				$this->add_js( 'jquery-magnificpopup' );
+				$this->add_css( 'font-awesome-5' );
 				$this->add_css( 'jquery-magnificpopup' );
 			} else {
 				wp_dequeue_script( 'jquery-magnificpopup' );
@@ -135,12 +136,15 @@ class FLPhotoModule extends FLBuilderModule {
 			// Save the photo.
 			$editor->save( $cropped_path['path'] );
 
-			// Let third party media plugins hook in.
-			do_action( 'fl_builder_photo_cropped', $cropped_path );
+			/**
+			 * Let third party media plugins hook in.
+			 * @see fl_builder_photo_cropped
+			 */
+			do_action( 'fl_builder_photo_cropped', $cropped_path, $editor );
 
 			// Return the new url.
 			return $cropped_path['url'];
-		}// End if().
+		}
 
 		return false;
 	}
@@ -159,8 +163,7 @@ class FLPhotoModule extends FLBuilderModule {
 				$this->data->link = $this->settings->photo_url;
 				$this->data->url = $this->settings->photo_url;
 				$this->settings->photo_src = $this->settings->photo_url;
-			} // End if().
-			elseif ( is_object( $this->settings->photo ) ) {
+			} elseif ( is_object( $this->settings->photo ) ) {
 				$this->data = $this->settings->photo;
 			} else {
 				$this->data = FLBuilderPhoto::get_attachment_data( $this->settings->photo );
@@ -221,8 +224,7 @@ class FLPhotoModule extends FLBuilderModule {
 			// See if the cropped photo already exists.
 			if ( fl_builder_filesystem()->file_exists( $cropped_path['path'] ) ) {
 				$src = $cropped_path['url'];
-			} // End if().
-			elseif ( stristr( $src, FL_BUILDER_DEMO_URL ) && ! stristr( FL_BUILDER_DEMO_URL, $_SERVER['HTTP_HOST'] ) ) {
+			} elseif ( stristr( $src, FL_BUILDER_DEMO_URL ) && ! stristr( FL_BUILDER_DEMO_URL, $_SERVER['HTTP_HOST'] ) ) {
 				$src = $this->_get_cropped_demo_url();
 			} // It doesn't, check if this is a OLD demo image.
 			elseif ( stristr( $src, FL_BUILDER_OLD_DEMO_URL ) ) {
@@ -298,6 +300,10 @@ class FLPhotoModule extends FLBuilderModule {
 					$attrs .= 'height="' . $size->height . '" width="' . $size->width . '" ';
 				}
 			}
+		}
+
+		if ( ! empty( $photo->title ) ) {
+			$attrs .= 'title="' . htmlspecialchars( $photo->title ) . '" ';
 		}
 
 		return $attrs;

@@ -1,10 +1,10 @@
 ﻿=== Woocommerce Products Slider ===
-	Contributors: pickplugins
-	Donate link: http://pickplugins.com
+	Contributors: PickPlugins
+	Donate link: https://www.pickplugins.com/item/woocommerce-products-slider-for-wordpress/?ref=wordpress.org
 	Tags: carousel, product, slider, woocommerce, carousel slider, product slider, woocommerce slider, Woocommerce Product slider
 	Requires at least: 3.8
 	Tested up to: 4.9
-	Stable tag: 1.12.20
+	Stable tag: 1.12.21
 	License: GPLv2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,9 +18,10 @@ A premium quality carousel slider to slide your woo-commerce product. easy to us
 
 ### Woocommerce Products Slider by http://pickplugins.com
 
-* [Buy Premium !&raquo;](http://www.pickplugins.com/item/woocommerce-products-slider-for-wordpress/?ref=wordpress.org)
-* [See the Live demo !&raquo;](http://www.pickplugins.com/demo/woocommerce-products-slider/?ref=wordpress.org)
-* [Support !&raquo;](https://www.pickplugins.com/support/)
+* [Buy Premium !&raquo;](https://www.pickplugins.com/item/woocommerce-products-slider-for-wordpress/?ref=wordpress.org)
+* [See the Live demo !&raquo;](https://www.pickplugins.com/demo/woocommerce-products-slider/?ref=wordpress.org)
+* [Support !&raquo;](https://www.pickplugins.com/support/?ref=wordpress.org)
+* [Documentation !&raquo;](https://www.pickplugins.com/documentation/woocommerce-products-slider/?ref=wordpress.org)
 
 
 
@@ -93,6 +94,8 @@ then paste this shortcode anywhere in your page to display slider<br />
 == Changelog ==
 
 
+	= 1.12.21 =
+    * 16/05/2018 fix - remove last comma on categories.
 
 	= 1.12.20 =
     * 20/02/2018 fix - PHP error issue fixed.

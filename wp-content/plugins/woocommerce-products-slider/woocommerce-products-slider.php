@@ -1,14 +1,14 @@
 <?php
 /*
 Plugin Name: Woocommerce Products Slider
-Plugin URI: http://pickplugins.com/items/woocommerce-product-slider-for-wordpress/
+Plugin URI: https://www.pickplugins.com/item/woocommerce-products-slider-for-wordpress/?ref=dashboard
 Description: Fully responsive and mobile ready Carousel Slider for your woo-commerce product. unlimited slider anywhere via short-codes and easy admin setting.
-Version: 1.12.20
-Author: pickplugins
+Version: 1.12.21
+Author: PickPlugins
 Author URI: http://pickplugins.com
 Text Domain: woocommerce-products-slider
 WC requires at least: 3.0.0
-WC tested up to: 3.2
+WC tested up to: 3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
@@ -24,12 +24,12 @@ class WoocommerceProductsSlider{
 		define('wcps_plugin_dir', plugin_dir_path( __FILE__ ) );
 		define('wcps_wp_url', 'https://wordpress.org/plugins/woocommerce-products-slider/' );
 		define('wcps_wp_reviews', 'http://wordpress.org/support/view/plugin-reviews/woocommerce-products-slider' );
-		define('wcps_pro_url','http://www.pickplugins.com/item/woocommerce-products-slider-for-wordpress/' );
-		define('wcps_demo_url', 'http://pickplugins.com/demo/woocommerce-products-slider/' );
-		define('wcps_conatct_url', 'http://pickplugins.com/contact/' );
-		define('wcps_qa_url', 'https://www.pickplugins.com/support/' );
+		define('wcps_pro_url','https://www.pickplugins.com/item/woocommerce-products-slider-for-wordpress/?ref=dashboard' );
+		define('wcps_demo_url', 'http://pickplugins.com/demo/woocommerce-products-slider//?ref=dashboard' );
+		define('wcps_conatct_url', 'http://pickplugins.com/contact//?ref=dashboard' );
+		define('wcps_qa_url', 'https://www.pickplugins.com/support/?ref=dashboard' );
 		define('wcps_plugin_name', 'Woocommerce Products Slider' );
-		define('wcps_plugin_version', '1.12.20');
+		define('wcps_plugin_version', '1.12.21');
 		define('wcps_customer_type', 'free' );	 // pro & free	
 		define('wcps_share_url', 'https://wordpress.org/plugins/woocommerce-products-slider/' );
 		define('wcps_tutorial_video_url', '' );

@@ -56,3 +56,45 @@ body {
 {
     background-color:#fff;
 }
+
+.woocommerce-active .site-branding, .woocommerce-active .site-header .site-search {
+    float: none;
+}
+.site-header .site-branding{
+    width: 95%;
+    margin: auto;
+}
+
+.site-search {
+    width: 42.73913%;
+}
+
+.site-header .custom-logo-link, .site-header .site-logo-anchor, .site-header .site-logo-link, .site-search {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 6em;
+}
+
+@media (min-width: 768px) {
+    .custom-logo-link, .site-branding, .site-header-cart, .site-logo-anchor, .site-logo-link, .site-search {
+        margin: 1.41575em 0;
+
+    }
+    .woocommerce-active .site-header .site-search {
+        width: 42.73913%;
+    }
+}
+
+.site-branding a img {
+    width: 300px;
+}
+
+.widget_product_search form button[type=submit], .widget_product_search form input[type=submit], .widget_search form button[type=submit], .widget_search form input[type=submit] {
+    right: -53px;
+    left: unset;
+    clip: auto;
+}
+
+.added_to_cart, .button, button, input[type=button], input[type=reset], input[type=submit] {
+    padding: 0.85em 1.4em;
+}

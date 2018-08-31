@@ -155,7 +155,7 @@ class WC_Klarna_Order_Management_Request {
 				'Authorization' => $this->get_klarna_authorization_header(),
 				'Content-Type'  => 'application/json',
 			),
-			'user-agent' => apply_filters( 'http_headers_useragent', 'WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ) ) . ' - OM:' . WC_KLARNA_ORDER_MANAGEMENT_VERSION,
+			'user-agent' => apply_filters( 'http_headers_useragent', 'WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ) ) . ' - OM:' . WC_KLARNA_ORDER_MANAGEMENT_VERSION . ' - PHP Version: ' . phpversion() . ' - Krokedil',
 			'method'     => $this->klarna_request_method,
 		);
 
@@ -172,7 +172,7 @@ class WC_Klarna_Order_Management_Request {
 			} elseif ( 'capture' === $this->klarna_request_body ) {
 				$order                = wc_get_order( $this->order_id );
 				$request_args['body'] = wp_json_encode( array(
-					'captured_amount' => $order->get_total() * 100,
+					'captured_amount' => round( $order->get_total() * 100, 0 ),
 				) );
 			} elseif ( 'refund' === $this->klarna_request_body ) {
 				// @TODO: Send order lines as well. Not always possible, but should be done when it is.
@@ -218,9 +218,9 @@ class WC_Klarna_Order_Management_Request {
 			return new WP_Error( 'wrong_gateway', 'This order was not create via Klarna Payments or Klarna Checkout for WooCommerce.' );
 		}
 
-		if ( 'yes' !== $gateway_settings['enabled'] ) {
+		/*if ( 'yes' !== $gateway_settings['enabled'] ) {
 			return new WP_Error( 'gateway_disabled', $gateway_title, ' gateway is currently disabled' );
-		}
+		}*/
 
 		if ( '' === $this->get_merchant_id() || '' === $this->get_shared_secret() ) {
 			return new WP_Error( 'missing_credentials', $gateway_title . ' credentials are missing' );

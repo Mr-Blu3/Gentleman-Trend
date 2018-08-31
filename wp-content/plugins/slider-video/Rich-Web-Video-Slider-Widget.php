@@ -414,7 +414,7 @@
 						.windows8_VS<?php echo $Rich_Web_VSlider_ID; ?> .wBall { width: 42px !important; height: 42px !important; }
 					<?php } elseif($Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_VS_ContSl_L_S == "middle") { ?>
 						.windows8_VS<?php echo $Rich_Web_VSlider_ID; ?> { width: 60px !important; height:60px !important; }
-						.windows8_VS<?php echo $Rich_Web_VSlider_ID; ?> .wBall { width: 56px !important; height: 56px !important; }
+						.windows8_VS<?php echo $Rich_Web_VSlider_ID; ?> .wBall { width: 56px !important; height: 56px !important;}
 					<?php } else { ?>
 						.windows8_VS<?php echo $Rich_Web_VSlider_ID; ?> { width: 78px !important; height:78px !important; }
 						.windows8_VS<?php echo $Rich_Web_VSlider_ID; ?> .wBall { width: 74px !important; height: 74px !important; }
@@ -966,6 +966,8 @@
 						height: 12px;
 						background: url('<?php echo plugins_url('/Images/bullets.png',__FILE__);?>') no-repeat;
 						line-height: 0px;
+						box-shadow: none !important;
+						-webkit-box-shadow: none !important;
 					}
 					.iview-controlNav<?php echo $Rich_Web_VSlider_ID; ?> a.iview-control.active { background-position: 0px -12px; }
 					.iview-caption
@@ -1143,8 +1145,9 @@
 					#iview<?php echo $Rich_Web_VSlider_ID; ?> .iviewSlider
 					{
 						display: block;
-						width: 700px;
-						height: 300px;
+						width: 100% !important;
+						height: 100% !important;
+						
 						overflow: hidden;
 						border-radius: 0px;
 						background-size:100% 100% !important;
@@ -1160,7 +1163,7 @@
 						text-indent:0px;
 						font-size:0px;
 					}
-					.iview-controlNav<?php echo $Rich_Web_VSlider_ID; ?> a.iview-control img { width:100%; height:100%; }
+					.iview-controlNav<?php echo $Rich_Web_VSlider_ID; ?> a.iview-control img { width:100%; height:100%; box-shadow:none !important;-webkit-box-shadow:none !important;}
 					.iview-controlNav<?php echo $Rich_Web_VSlider_ID; ?> a.iview-controlPrevNav<?php echo $Rich_Web_VSlider_ID; ?>
 					{
 						display:inline-block !important;
@@ -1171,6 +1174,11 @@
 						box-shadow:none !important;
 						-moz-box-shadow:none !important;
 						-webkit-box-shadow:none !important;
+						transition:all 0s !important;
+						-webkit-transition:all 0s !important;
+						-ms-transition:all 0s !important;
+						-moz-transition:all 0s !important;
+						-o-transition:all 0s !important;
 					}
 					.iview-controlNav<?php echo $Rich_Web_VSlider_ID; ?> a.iview-controlNextNav
 					{
@@ -1182,6 +1190,11 @@
 						box-shadow:none !important;
 						-moz-box-shadow:none !important;
 						-webkit-box-shadow:none !important;
+						transition:all 0s !important;
+						-webkit-transition:all 0s !important;
+						-ms-transition:all 0s !important;
+						-moz-transition:all 0s !important;
+						-o-transition:all 0s !important;
 					}
 					#cont<?php echo $Rich_Web_VSlider_ID; ?> { width: 100%; height: 100%; overflow: hidden; top: 0; left: 0; z-index: 70; overflow: auto; }
 					.titcol<?php echo $Rich_Web_VSlider_ID; ?> { color:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_CS_TC;?>; }
@@ -1234,9 +1247,9 @@
 						text-align:center;
 					}
 					.iview-timer_Anim { display:none !important; }
-					@media screen and (max-width:700px)
+					@media screen and (max-width:820px)
 					{
-						.iview-controlNav<?php echo $Rich_Web_VSlider_ID; ?> a.iview-controlNextNav { cursor:default !important; }
+						.iview-controlNav<?php echo $Rich_Web_VSlider_ID; ?> a.iview-controlNextNav,.iview-controlNav<?php echo $Rich_Web_VSlider_ID; ?> a.iview-control { cursor:default !important; }
 						.iview-controlNav<?php echo $Rich_Web_VSlider_ID; ?> a.iview-controlPrevNav<?php echo $Rich_Web_VSlider_ID; ?> { cursor:default !important; }
 						#iview-timer<?php echo $Rich_Web_VSlider_ID; ?> { cursor:default !important; }
 					}
@@ -1948,8 +1961,8 @@
 							},
 							addBlocks: function () {
 								var iv = this,
-									blockWidth = iv.slider.width() / iv.options.blockCols,
-									blockHeight = iv.slider.height() / iv.options.blockRows;
+									blockWidth = Math.ceil(iv.slider.width() / iv.options.blockCols),
+									blockHeight = Math.ceil(iv.slider.height() / iv.options.blockRows);
 								for (var rows = 0; rows < iv.options.blockRows; rows++)
 								{
 									for (var columns = 0; columns < iv.options.blockCols; columns++)
@@ -1959,7 +1972,7 @@
 											width = blockWidth + 'px',
 											height = blockHeight + 'px',
 											bgPosition = '-' + ((blockWidth + (columns * blockWidth)) - blockWidth) + 'px -' + ((blockHeight + (rows * blockHeight)) - blockHeight) + 'px';
-										if (columns == iv.options.blockCols - 1) width = (iv.slider.width() - (blockWidth * columns)) + 'px';
+										if (columns == iv.options.blockCols - 1) width = Math.ceil(iv.slider.width() - (blockWidth * columns)) + 'px';
 										var block = $('<div class="iview-block<?php echo $Rich_Web_VSlider_ID; ?>"></div>').css({
 											width: blockWidth + 'px',
 											height: blockHeight + 'px',
@@ -2168,9 +2181,10 @@
 									if (fx == 'zigzag-bottom' || fx == 'zigzag-grow-bottom' || fx == 'zigzag-drop-bottom') blockToArr.reverse();
 									blocks.each(function (i) {
 										var block = $(blockToArr[i]),
-											h = iv.slider.height() / iv.options.blockRows,
-											w = iv.slider.width() / iv.options.blockCols,
+											h = Math.ceil(iv.slider.height() / iv.options.blockRows),
+											w = Math.ceil(iv.slider.width() / iv.options.blockCols),
 											top = block.css('top');
+											// console.log(w);
 										if (fx == 'zigzag-grow-top' || fx == 'zigzag-grow-bottom') block.width(0).height(0);
 										else if (fx == 'zigzag-drop-top' || fx == 'zigzag-drop-bottom') block.css({ top: '-=50' });
 										setTimeout(function () {
@@ -2212,8 +2226,8 @@
 											{
 												(function () {
 													var block = $(blockToArr[rows][Col]);
-													var w = iv.slider.width() / iv.options.blockCols;
-													var h = iv.slider.height() / iv.options.blockRows;
+													var w = Math.ceil(iv.slider.width() / iv.options.blockCols);
+													var h = Math.ceil(iv.slider.height() / iv.options.blockRows);
 													if (fx == 'block-expand' || fx == 'block-expand-reverse') { block.width(0).height(0); }
 													setTimeout(function () {
 														block.animate({ opacity: '1', width: w, height: h
@@ -2235,9 +2249,9 @@
 									var blocks = iv.shuffle($('.iview-block<?php echo $Rich_Web_VSlider_ID; ?>', iv.slider));
 									blocks.each(function (i) {
 										var block = $(this),
-											h = iv.slider.height() / iv.options.blockRows,
-											w = iv.slider.width() / iv.options.blockCols,
-											top = block.css('top');
+											h = Math.ceil(iv.slider.height() / iv.options.blockRows),
+											w = Math.ceil(iv.slider.width() / iv.options.blockCols,
+											top = block.css('top'));
 										if (fx == 'block-expand-random') block.width(0).height(0);
 										if (fx == 'block-drop-random') block.css({ top: '-=50' });
 										setTimeout(function () {
@@ -2319,7 +2333,7 @@
 								var fx = iv.options.fx;
 								if (iv.options.fx.toLowerCase() == 'random')
 								{
-									var transitions = new Array('left-curtain', 'right-curtain', 'top-curtain', 'bottom-curtain', 'strip-down-right', 'strip-down-left', 'strip-up-right', 'strip-up-left', 'strip-up-down', 'strip-up-down-left', 'strip-left-right', 'strip-left-right-down', 'slide-in-right', 'slide-in-left', 'slide-in-up', 'slide-in-down', 'fade', 'block-random', 'block-fade', 'block-fade-reverse', 'block-expand', 'block-expand-reverse', 'block-expand-random', 'zigzag-top', 'zigzag-bottom', 'zigzag-grow-top', 'zigzag-grow-bottom', 'zigzag-drop-top', 'zigzag-drop-bottom', 'strip-left-fade', 'strip-right-fade', 'strip-top-fade', 'strip-bottom-fade', 'block-drop-random');
+									var transitions = new Array('left-curtain', 'right-curtain', 'top-curtain', 'bottom-curtain', 'strip-down-right', 'strip-down-left', 'strip-up-right', 'strip-up-left', 'strip-up-down', 'strip-up-down-left', 'strip-left-right', 'strip-left-right-down', 'slide-in-right', 'slide-in-left', 'slide-in-up', 'slide-in-down', 'fade', 'block-random', 'block-fade', 'block-fade-reverse', 'block-expand', 'block-expand-reverse', 'block-expand-random', 'zigzag-top', 'zigzag-bottom', 'zigzag-grow-top', 'zigzag-grow-bottom', 'zigzag-drop-top', 'zigzag-drop-bottom', 'strip-top-fade', 'strip-bottom-fade', 'block-drop-random');
 									fx = transitions[Math.floor(Math.random() * (transitions.length + 1))];
 									if (fx == undefined) fx = 'fade';
 									fx = $.trim(fx.toLowerCase());
@@ -2672,8 +2686,8 @@
 							jQuery(".iview-caption").addClass("iview-caption_Anim");
 							jQuery('#iview<?php echo $Rich_Web_VSlider_ID; ?>,#iview<?php echo $Rich_Web_VSlider_ID; ?> .iviewSlider,.iview-video<?php echo $Rich_Web_VSlider_ID; ?>,.iview-video<?php echo $Rich_Web_VSlider_ID; ?>-show,#RW_Load_Content_Navigation_VS<?php echo $Rich_Web_VSlider_ID; ?>').css('width',slWV+"px");
 							jQuery('#iview<?php echo $Rich_Web_VSlider_ID; ?>,#iview<?php echo $Rich_Web_VSlider_ID; ?> .iviewSlider,.iview-video<?php echo $Rich_Web_VSlider_ID; ?>,.iview-video<?php echo $Rich_Web_VSlider_ID; ?>-show,#RW_Load_Content_Navigation_VS<?php echo $Rich_Web_VSlider_ID; ?>').css('height',slHV+"px");
-							jQuery('#iview<?php echo $Rich_Web_VSlider_ID; ?>,#iview<?php echo $Rich_Web_VSlider_ID; ?> .iviewSlider,.iview-video<?php echo $Rich_Web_VSlider_ID; ?>,.iview-video<?php echo $Rich_Web_VSlider_ID; ?>-show,#RW_Load_Content_Navigation_VS<?php echo $Rich_Web_VSlider_ID; ?>').css('max-width',"100%");
-							jQuery('#iview<?php echo $Rich_Web_VSlider_ID; ?>,#iview<?php echo $Rich_Web_VSlider_ID; ?> .iviewSlider,.iview-video<?php echo $Rich_Web_VSlider_ID; ?>,.iview-video<?php echo $Rich_Web_VSlider_ID; ?>-show,#RW_Load_Content_Navigation_VS<?php echo $Rich_Web_VSlider_ID; ?>').css('max-height',Math.floor(parseInt(jQuery('#iview<?php echo $Rich_Web_VSlider_ID; ?>').width())*slHV/slWV));
+							jQuery('#iview<?php echo $Rich_Web_VSlider_ID; ?>,#iview<?php echo $Rich_Web_VSlider_ID; ?> .iviewSlider,.iview-video<?php echo $Rich_Web_VSlider_ID; ?>,.iview-video<?php echo $Rich_Web_VSlider_ID; ?>-show,#RW_Load_Content_Navigation_VS<?php echo $Rich_Web_VSlider_ID; ?>').css('max-width',Math.round(jQuery("#iview<?php echo $Rich_Web_VSlider_ID; ?>").parent().width()));
+							jQuery('#iview<?php echo $Rich_Web_VSlider_ID; ?>,#iview<?php echo $Rich_Web_VSlider_ID; ?> .iviewSlider,.iview-video<?php echo $Rich_Web_VSlider_ID; ?>,.iview-video<?php echo $Rich_Web_VSlider_ID; ?>-show,#RW_Load_Content_Navigation_VS<?php echo $Rich_Web_VSlider_ID; ?>').css('max-height',Math.round(parseInt(jQuery('#iview<?php echo $Rich_Web_VSlider_ID; ?>').width())*slHV/slWV));
 							jQuery('#RW_Load_Content_Navigation_VS<?php echo $Rich_Web_VSlider_ID; ?>').css("padding-bottom","0");
 							if(jQuery('#iview<?php echo $Rich_Web_VSlider_ID; ?>').width()<=400)
 							{
@@ -2880,7 +2894,7 @@
 						position:relative;
 						margin:20px auto !important;
 						background-color:<?php echo $Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_SlickSl_L_BgC; ?> !important;
-						z-index:999;
+						z-index:2;
 						width:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_W;?>px;
 						height:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_H;?>px;
 						max-width:100% !important;
@@ -3682,12 +3696,18 @@
 						-moz-transition:.2s ease-out;
 						-webkit-transition:.2s ease-out;
 						font-family: sans-serif;
+						border: none !important;
+						outline:none !important;
 					}
 					.smoothslides<?php echo $Rich_Web_VSlider_ID; ?>-on  a.ss-next<?php echo $Rich_Web_VSlider_ID; ?> { left:auto; right:5px; }
 					.smoothslides<?php echo $Rich_Web_VSlider_ID; ?>-on:hover .ss-prev<?php echo $Rich_Web_VSlider_ID; ?>, .smoothslides<?php echo $Rich_Web_VSlider_ID; ?>-on:hover .ss-next<?php echo $Rich_Web_VSlider_ID; ?> { opacity: 1; }
 					.smoothslides<?php echo $Rich_Web_VSlider_ID; ?>-on .ss-prev<?php echo $Rich_Web_VSlider_ID; ?>:hover, .smoothslides<?php echo $Rich_Web_VSlider_ID; ?>-on .ss-next<?php echo $Rich_Web_VSlider_ID; ?>:hover { opacity: 1; }
 					.ss-paginate-wrap<?php echo $Rich_Web_VSlider_ID; ?> { position: absolute; bottom:-20px; width:100%; text-align:center !important; }
 					.ss-paginate<?php echo $Rich_Web_VSlider_ID; ?> { display: inline-block; line-height: 0; }
+					.ss-paginate<?php echo $Rich_Web_VSlider_ID; ?> > a{
+						box-shadow: none !important;
+						-webkit-box-shadow: none !important;
+					}
 					.ss-paginate<?php echo $Rich_Web_VSlider_ID; ?> a:link, .ss-paginate<?php echo $Rich_Web_VSlider_ID; ?> a:visited
 					{
 						display: inline-block;
@@ -3743,6 +3763,8 @@
 						color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_NC;?>;
 						background-color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_NBgC;?>;
 						z-index:999;
+						box-shadow:none !important;
+						-webkit-box-shadow:none !important;
 					}
 					.ss-paginate<?php echo $Rich_Web_VSlider_ID; ?>-wrap<?php echo $Rich_Web_VSlider_ID; ?>
 					{
@@ -3850,6 +3872,16 @@
 						font-weight: bold;
 						font-size: 20px;
 					}
+
+					@media screen and (max-width:820px){
+						#demo<?php echo $Rich_Web_VSlider_ID; ?> .center<?php echo $Rich_Web_VSlider_ID; ?>{
+							cursor: default !important;
+						}
+						.smoothslides<?php echo $Rich_Web_VSlider_ID; ?>-on a.ss-prev<?php echo $Rich_Web_VSlider_ID; ?>, .smoothslides<?php echo $Rich_Web_VSlider_ID; ?>-on a.ss-next<?php echo $Rich_Web_VSlider_ID; ?>,.ss-paginate<?php echo $Rich_Web_VSlider_ID; ?> a:link, .ss-paginate<?php echo $Rich_Web_VSlider_ID; ?> a:visited, .ss-paginate<?php echo $Rich_Web_VSlider_ID; ?> a{
+							cursor: default !important;
+						}
+					}
+					
 				</style>
 				<div id="RW_Load_Slick_Navigation<?php echo $Rich_Web_VSlider_ID; ?>" style="<?php if($Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_SlickSl_Loading_Show == "on") { ?>display: block;<?php } else { ?>display: none;<?php } ?>">
 					<div class="center_content<?php echo $Rich_Web_VSlider_ID; ?>">
@@ -3961,19 +3993,19 @@
 				<script>
 					(function($) {
 						$.fn.extend({
-							smoothslides<?php echo $Rich_Web_VSlider_ID; ?>: function(options) {
-								var defaults = {
-									effectDuration: 5000,
-									transitionDuration: 500,
-									autoPlay: 'true',
-									effect: 'zoomOut,zoomIn,panUp,panDown,panLeft,panRight,diagTopLeftToBottomRight,diagTopRightToBottomLeft,diagBottomRightToTopLeft,diagBottomLeftToTopRight',
+									smoothslides<?php echo $Rich_Web_VSlider_ID; ?>: function(options) {
+										var defaults = {
+											effectDuration: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_ED*1000;?>,
+									transitionDuration: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_PT;?>,
+									autoPlay: '<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_AP=='on'){echo 'true';}else{echo 'false';}?>',
+									effect: '<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_Eff;?>',
 									effectEasing: 'ease-in-out',
 									nextText: ' ►',
 									prevText: '◄ ',
-									captions: 'true',
-									navigation: 'true',
-									pagination: 'true',
-									matchImageSize: 'true'
+									captions: '<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_TShow=='on'){echo 'true';}else{echo 'false';}?>',
+									navigation: '<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_NShow=='on'){echo 'true';}else{echo 'false';}?>',
+									pagination: '<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_PagShow=='on'){echo 'true';}else{echo 'false';}?>',
+									matchImageSize: 'false'
 								}
 								var options = $.extend(defaults, options),
 									that = this,
@@ -3981,6 +4013,10 @@
 									fullTime= options.effectDuration + options.transitionDuration,
 									maxWidth = $(this).find('img').width()
 								if (options.transitionDuration >= options.effectDuration) { console.log("Make sure effectDuration is greater than transitionDuration"); }
+								var y=false;
+								
+								
+
 								$('#'+uniqueId).removeClass('smoothslides<?php echo $Rich_Web_VSlider_ID; ?>').addClass('smoothslides<?php echo $Rich_Web_VSlider_ID; ?>-on');
 								function fadeOutLast() {
 									if (document.all && !window.atob)
@@ -4085,6 +4121,7 @@
 								$('#'+ uniqueId +' .ss-slide').each(function() { $(this).prependTo('#'+uniqueId); });
 								$('#'+uniqueId+' .ss-slide:first').css('position','relative');
 								if(options.autoPlay == 'true') { $(".ss-slide:first", this).appendTo(this) }
+
 								$(this).wrapInner("<div class='ss-slide-stage<?php echo $Rich_Web_VSlider_ID; ?>'></div>")
 								$(".ss-slide",this).each(function(){ $(this).css({ transition: 'all ' + options.effectDuration + 'ms ' + options.effectEasing +'' }); });
 								function captionUpdate() 
@@ -4117,7 +4154,7 @@
 								if (options.pagination == 'true')
 								{
 									$(that).append('<div class="ss-paginate-wrap<?php echo $Rich_Web_VSlider_ID; ?>"><div class="ss-paginate<?php echo $Rich_Web_VSlider_ID; ?>"></div></div>');
-									$(".ss-slide",that).each(function() { $('.ss-paginate<?php echo $Rich_Web_VSlider_ID; ?>', that).append('<a href="#"></a>'); });
+									$(".ss-slide",that).each(function() { $('.ss-paginate<?php echo $Rich_Web_VSlider_ID; ?>', that).append('<a href="#" onclick="Rich_Web_VSldier_Src<?php echo $Rich_Web_VSlider_ID; ?>_Clos()"></a>'); });
 									if (options.autoPlay == "true")
 									{
 										$('.ss-paginate<?php echo $Rich_Web_VSlider_ID; ?> a:last', that).addClass("ss-paginate<?php echo $Rich_Web_VSlider_ID; ?>-current");
@@ -4129,6 +4166,7 @@
 								}
 								function paginationUpdate()
 								{
+									
 									var total = $(that).find('.ss-paginate<?php echo $Rich_Web_VSlider_ID; ?> a').length;
 									var current = $(that).find('a.ss-paginate<?php echo $Rich_Web_VSlider_ID; ?>-current').index();
 									var next = current + 1;
@@ -4145,6 +4183,7 @@
 								}
 								function paginationUpdateBack()
 								{
+									
 									var total = $(that).find('.ss-paginate<?php echo $Rich_Web_VSlider_ID; ?> a').length;
 									var current = $(that).find('a.ss-paginate<?php echo $Rich_Web_VSlider_ID; ?>-current').index();
 									var next = current - 1;
@@ -4161,13 +4200,17 @@
 								}
 								var autoPlay = function ()
 								{
+									// console.log(y);
+									if(y){
+										return;
+									}
 									if (document.all && !window.atob){ that.crossFade(); }
 									else { effectArray = options.effect.split(','); var effect = effectArray[Math.floor(Math.random() * effectArray.length)]; that[effect](); }
 									captionUpdate();
 									paginationUpdate();
 								}
 								if (options.autoPlay == 'true') { autoPlay(); var playInterval = setInterval(autoPlay, fullTime); }
-								$('.ss-prev<?php echo $Rich_Web_VSlider_ID; ?>, .ss-next<?php echo $Rich_Web_VSlider_ID; ?>, .ss-paginate<?php echo $Rich_Web_VSlider_ID; ?>', that).mouseover(function() { clearInterval(playInterval); }).mouseout(function() { playInterval = setInterval(autoPlay, fullTime); });
+								// $('.ss-prev<?php echo $Rich_Web_VSlider_ID; ?>, .ss-next<?php echo $Rich_Web_VSlider_ID; ?>, .ss-paginate<?php echo $Rich_Web_VSlider_ID; ?>', that).mouseover(function() { clearInterval(playInterval); }).mouseout(function() { playInterval = setInterval(autoPlay, fullTime); });
 								$('#'+uniqueId).on('click', '.ss-next<?php echo $Rich_Web_VSlider_ID; ?>-on', function(event) {
 									$('.ss-next<?php echo $Rich_Web_VSlider_ID; ?>-on', that).removeClass('ss-next<?php echo $Rich_Web_VSlider_ID; ?>-on');
 									$(that).find('.ss-slide:last').css({ 'transition':'all '+options.transitionDuration+'ms', 'opacity':'0' });
@@ -4211,25 +4254,23 @@
 									else { $('#'+uniqueId).find(".ss-caption<?php echo $Rich_Web_VSlider_ID; ?>").css('opacity','1').html(nextCaption); }
 									event.preventDefault();
 								});
+								$(".Rich_Web_VSldier_PlayIcon<?php echo $Rich_Web_VSlider_ID; ?> span, .ss-slide img").click(function(){
+
+									y=true;
+
+								})
+								$(".ss-paginate<?php echo $Rich_Web_VSlider_ID; ?> a, .Rich_Web_VSldier_Src<?php echo $Rich_Web_VSlider_ID; ?>_Close").click(function(){
+
+									y=false;
+
+								})
 							}
 						});
 					})(jQuery);
 				</script>
 				<script type="text/javascript">
 					jQuery(window).load( function() {
-						jQuery('#myslideshow1<?php echo $Rich_Web_VSlider_ID; ?>').smoothslides<?php echo $Rich_Web_VSlider_ID; ?>({
-							effectDuration: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_ED*1000;?>,
-							transitionDuration: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_PT;?>,
-							autoPlay: '<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_AP=='on'){echo 'true';}else{echo 'false';}?>',
-							effect: '<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_Eff;?>',
-							effectEasing: 'ease-in-out',
-							nextText: ' ►',
-							prevText: '◄ ',
-							captions: '<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_TShow=='on'){echo 'true';}else{echo 'false';}?>',
-							navigation: '<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_NShow=='on'){echo 'true';}else{echo 'false';}?>',
-							pagination: '<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_VS_SS_PagShow=='on'){echo 'true';}else{echo 'false';}?>',
-							matchImageSize: 'false'
-						});
+						jQuery('#myslideshow1<?php echo $Rich_Web_VSlider_ID; ?>').smoothslides<?php echo $Rich_Web_VSlider_ID; ?>();
 					});
 				</script>
 				<script>
@@ -4361,7 +4402,7 @@
 						position:relative;
 						margin:20px auto !important;
 						background-color:<?php echo $Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_ThumbSl_L_BgC; ?> !important;
-						z-index:999;
+						z-index:2;
 						width:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_W;?>px;
 						height:<?php echo ($Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_H+$Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_TIH);?>px;
 						max-width:100%;
@@ -5160,28 +5201,22 @@
 					#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #left-arrow<?php echo $Rich_Web_VSlider_ID; ?>
 					{
 						position:relative;
-						top: 50%; 
 						margin-left: 1px;
 						margin-right: 1px;
 						display: inline-block;
+						width:25px !important;
+						height:25px !important;
 						float: left;
-						transform:translateY(-50%);
-						-webkit-transform:translateY(-50%);
-						-moz-transform:translateY(-50%);
-						-ms-transform:translateY(-50%);
 					}
 					#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #right-arrow<?php echo $Rich_Web_VSlider_ID; ?>
 					{
 						position:relative;
-						top: 50%;
+						width:25px !important;
+						height:25px !important;
 						margin-right: 1px;
 						margin-left: 1px;
 						display: inline-block;
 						float: right;
-						transform:translateY(-50%);
-						-webkit-transform:translateY(-50%);
-						-moz-transform:translateY(-50%);
-						-ms-transform:translateY(-50%);
 					}
 					#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> .icon
 					{
@@ -5278,6 +5313,10 @@
 					}
 					#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?>
 					{
+						display:-webkit-flex;
+						display:flex;
+						justify-content: center;
+						align-items: center;
 						position:relative;
 						width: 100% !important;
 						height:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_TIH+24;?>px;
@@ -5312,7 +5351,7 @@
 					}
 					#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #thumbcon<?php echo $Rich_Web_VSlider_ID; ?>
 					{
-						width: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_W-110;?>px;
+						width: calc(100% - 58px) !important;
 					}
 					<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_TPos=='top'){ ?>
 						#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #playtoggle<?php echo $Rich_Web_VSlider_ID; ?>
@@ -5340,8 +5379,13 @@
 						-khtml-border-radius: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_IBR;?>px;
 						border-radius: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_IBR;?>px;
 					}
+
 					#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #thumbcon<?php echo $Rich_Web_VSlider_ID; ?> .thumb
 					{
+						position:relative;
+						box-sizing: border-box !important;
+						width:100px !important;
+						object-fit: cover !important;
 						margin: 12px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_TIPB;?>px;
 						border: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_TIBW;?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_TIBS;?> <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_TIBC;?>;
 						border-radius: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_TIBR;?>px;
@@ -5384,6 +5428,7 @@
 					}
 					#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #thumbcon<?php echo $Rich_Web_VSlider_ID; ?> .selected
 					{
+						box-shadow:none !important;
 						border-color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_TICBC;?>;
 						border-style: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_TICBS;?>;
 						<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_TIBoxShShow=='on'){ ?>
@@ -5426,7 +5471,7 @@
 						left: 0;
 						width: 100%;
 						height: 50px;
-						z-index: 9999;
+						z-index: 2;
 						text-align: center;
 					}
 					.Rich_Web_VSlider_TS_PlayIcon<?php echo $Rich_Web_VSlider_ID; ?> span
@@ -5446,6 +5491,11 @@
 					{
 						background-color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_PIHBgC;?>;
 						color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_PIHC;?>;
+					}
+					@media screen and (max-width:820px){
+						#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> .icon,#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> .icon-arrow-left,.Rich_Web_VSlider_TS_PlayIcon<?php echo $Rich_Web_VSlider_ID; ?> span,#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #thumbcon<?php echo $Rich_Web_VSlider_ID; ?> .thumb{
+							cursor:default !important;
+						}
 					}
 				</style>
 				<div id="RW_Load_Thumb_Navigation<?php echo $Rich_Web_VSlider_ID; ?>" style="<?php if($Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_ThumbSl_Loading_Show == "on") { ?>display: block;<?php } else { ?>display: none;<?php } ?>">
@@ -5538,7 +5588,7 @@
 					</section>
 					<section id="gallery-main<?php echo $Rich_Web_VSlider_ID; ?>_Anim" class="Rich_Web_Gallery_Main">
 						<div class="Rich_Web_VSlider_TS_PlayIcon<?php echo $Rich_Web_VSlider_ID; ?>" onclick="Rich_Web_VSlider_TS_Play_Video<?php echo $Rich_Web_VSlider_ID; ?>()">
-							<span> ►</span>
+							<span><i class="rich_web rich_web-play"></i></span>
 						</div>
 					</section>
 					<section id="gallery-hidden<?php echo $Rich_Web_VSlider_ID; ?>">
@@ -5600,7 +5650,7 @@
 						jQuery('.Rich_Web_VSlider_TS_PlayIcon<?php echo $Rich_Web_VSlider_ID; ?>').css('display','block');
 					}
 				</script>
-				<script defer >
+				<script >
 					var $transitionLength<?php echo $Rich_Web_VSlider_ID; ?> = <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_CS;?>;
 					var $timeBetweenTransitions = <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_PT*1000;?>;
 					//STORAGE
@@ -5619,15 +5669,21 @@
 					<?php }else{ ?>
 						var $go<?php echo $Rich_Web_VSlider_ID; ?> = false;
 					<?php }?>
-					jQuery(document).ready(function(){
+					// jQuery(document).ready(function(){
 						jQuery("#gallery-hidden<?php echo $Rich_Web_VSlider_ID; ?> img").each(function() { $imageBank<?php echo $Rich_Web_VSlider_ID; ?>.push(jQuery(this).attr("id", imageCount<?php echo $Rich_Web_VSlider_ID; ?>)); imageCount<?php echo $Rich_Web_VSlider_ID; ?>++; });
 						generateThumbs<?php echo $Rich_Web_VSlider_ID; ?>();
 						setTimeout(function () { imageScroll<?php echo $Rich_Web_VSlider_ID; ?>(0); }, $timeBetweenTransitions);
-						jQuery('#left-arrow<?php echo $Rich_Web_VSlider_ID; ?>').click(function () { thumbScroll<?php echo $Rich_Web_VSlider_ID; ?>("left"); toggleScroll<?php echo $Rich_Web_VSlider_ID; ?>(true); });
-						jQuery('#right-arrow<?php echo $Rich_Web_VSlider_ID; ?>').click(function () { thumbScroll<?php echo $Rich_Web_VSlider_ID; ?>("right"); toggleScroll<?php echo $Rich_Web_VSlider_ID; ?>(true); });
+						jQuery('#left-arrow<?php echo $Rich_Web_VSlider_ID; ?>').click(function (e) {
+							thumbScroll<?php echo $Rich_Web_VSlider_ID; ?>("left"); 
+							toggleScroll<?php echo $Rich_Web_VSlider_ID; ?>(true); 
+						});
+						jQuery('#right-arrow<?php echo $Rich_Web_VSlider_ID; ?>').click(function () { 
+							thumbScroll<?php echo $Rich_Web_VSlider_ID; ?>("right"); 
+							toggleScroll<?php echo $Rich_Web_VSlider_ID; ?>(true); 
+						});
 						jQuery('#thumbcon<?php echo $Rich_Web_VSlider_ID; ?> img').on('click',function () { imageFocus<?php echo $Rich_Web_VSlider_ID; ?>(this); });
 						jQuery('#playtoggle<?php echo $Rich_Web_VSlider_ID; ?>').click(function () { toggleScroll<?php echo $Rich_Web_VSlider_ID; ?>(false); });
-					});
+					// });
 					function progress<?php echo $Rich_Web_VSlider_ID; ?>(imageIndex)
 					{
 						var partsphp = <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_TS_W;?>;
@@ -5678,20 +5734,21 @@
 					function autoScroll<?php echo $Rich_Web_VSlider_ID; ?>()
 					{
 						if(y==true){ return; }
-						var imgW=jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #thumbcon<?php echo $Rich_Web_VSlider_ID; ?> .thumb').width();
+						var imgW=jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #thumbcon<?php echo $Rich_Web_VSlider_ID; ?> .thumb').outerWidth();
 						var mLeft=jQuery('.marginLeft').val();
-						AutImgW=parseInt(imgW)+2*parseInt(jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #thumbcon<?php echo $Rich_Web_VSlider_ID; ?> .thumb').css('border-width'))+2*parseInt(mLeft);
+						AutImgW=parseInt(imgW)+2*parseInt(mLeft);
 						var tumCWidth=jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #thumbcon<?php echo $Rich_Web_VSlider_ID; ?>').width();
 						if(currentScrollIndex<?php echo $Rich_Web_VSlider_ID; ?> >= 0 || currentScrollIndex<?php echo $Rich_Web_VSlider_ID; ?> < imageCount<?php echo $Rich_Web_VSlider_ID; ?>)
 						{
 							if(parseInt($thumbBank<?php echo $Rich_Web_VSlider_ID; ?>[0].css('margin-left'))<=-parseInt((imageCount<?php echo $Rich_Web_VSlider_ID; ?>)*AutImgW-parseInt(tumCWidth)))
 							{
-								$thumbBank<?php echo $Rich_Web_VSlider_ID; ?>[0].css({ marginLeft: "5px" , transition: "all 1.0s ease"});
+								$thumbBank<?php echo $Rich_Web_VSlider_ID; ?>[0].css({ marginLeft: "5px" , webkitMarginLeft: "5px" , mozMarginLeft: "5px" , transition: "all 1.0s ease", webkitTransition: "all 1.0s ease", MozTransition: "all 1.0s ease", msTransition: "all 1.0s ease", OTransition: "all 1.0s ease"});
 								currentScrollIndex<?php echo $Rich_Web_VSlider_ID; ?> = 1;
 							}
 							else
 							{
-								$thumbBank<?php echo $Rich_Web_VSlider_ID; ?>[0].css({ marginLeft: "-="+AutImgW+"" , transition: "all 1.0s ease"});
+
+								$thumbBank<?php echo $Rich_Web_VSlider_ID; ?>[0].css({ marginLeft: "-="+AutImgW+"" , webkitMarginLeft: "-="+AutImgW+"" , mozMarginLeft: "-="+AutImgW+"" , transition: "all 1.0s ease", webkitTransition: "all 1.0s ease", MozTransition: "all 1.0s ease", msTransition: "all 1.0s ease", OTransition: "all 1.0s ease"});
 								currentScrollIndex<?php echo $Rich_Web_VSlider_ID; ?>++;
 							}
 						}
@@ -5700,9 +5757,9 @@
 					{
 						if(y==true){ return; }
 						y=true;
-						var imgW=jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #thumbcon<?php echo $Rich_Web_VSlider_ID; ?> .thumb').width();
+						var imgW=jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #thumbcon<?php echo $Rich_Web_VSlider_ID; ?> .thumb').outerWidth();
 						var mLeft=jQuery('.marginLeft').val();
-						AutImgW=parseInt(imgW)+2*parseInt(jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #thumbcon<?php echo $Rich_Web_VSlider_ID; ?> .thumb').css('border-width'))+2*parseInt(mLeft);
+						AutImgW=parseInt(imgW)+2*parseInt(mLeft);
 						var tumCWidth=jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #thumbcon<?php echo $Rich_Web_VSlider_ID; ?>').width();
 						if(currentScrollIndex<?php echo $Rich_Web_VSlider_ID; ?> >= 0 || currentScrollIndex<?php echo $Rich_Web_VSlider_ID; ?> < imageCount<?php echo $Rich_Web_VSlider_ID; ?>)
 						{
@@ -5712,26 +5769,30 @@
 							{
 								if(currentScrollIndex<?php echo $Rich_Web_VSlider_ID; ?>-1 <= 0)
 								{
+									
 									k = ((imageCount<?php echo $Rich_Web_VSlider_ID; ?>)*AutImgW-parseInt(tumCWidth));
-									$thumbBank<?php echo $Rich_Web_VSlider_ID; ?>[0].css({ marginLeft: -k , transition: "all 1.0s ease"});
+									$thumbBank<?php echo $Rich_Web_VSlider_ID; ?>[0].css({ marginLeft: -k , transition: "all 1.0s ease", webkitTransition: "all 1.0s ease", MozTransition: "all 1.0s ease", msTransition: "all 1.0s ease", OTransition: "all 1.0s ease"});
 									currentScrollIndex<?php echo $Rich_Web_VSlider_ID; ?> = imageCount<?php echo $Rich_Web_VSlider_ID; ?>-1;
 								}
 								else
 								{
-									$thumbBank<?php echo $Rich_Web_VSlider_ID; ?>[0].css({ marginLeft: "+="+AutImgW+"" , transition: "all 1.0s ease"});
+									
+									$thumbBank<?php echo $Rich_Web_VSlider_ID; ?>[0].css({ marginLeft: "+="+AutImgW+"" , transition: "all 1.0s ease", webkitTransition: "all 1.0s ease", MozTransition: "all 1.0s ease", msTransition: "all 1.0s ease", OTransition: "all 1.0s ease"});
 									currentScrollIndex<?php echo $Rich_Web_VSlider_ID; ?>--;
 								}
 							}
 							else if(direction == "right")
 							{
+								
 								if(parseInt($thumbBank<?php echo $Rich_Web_VSlider_ID; ?>[0].css('margin-left'))<=-parseInt((imageCount<?php echo $Rich_Web_VSlider_ID; ?>)*AutImgW-parseInt(tumCWidth)))
 								{
-									$thumbBank<?php echo $Rich_Web_VSlider_ID; ?>[0].css({ marginLeft: "5px" , transition: "all 1.0s ease"});
+									
+									$thumbBank<?php echo $Rich_Web_VSlider_ID; ?>[0].css({ marginLeft: "5px" , transition: "all 1.0s ease", webkitTransition: "all 1.0s ease", MozTransition: "all 1.0s ease", msTransition: "all 1.0s ease", OTransition: "all 1.0s ease"});
 									currentScrollIndex<?php echo $Rich_Web_VSlider_ID; ?> = 1;
 								}
 								else
 								{
-									$thumbBank<?php echo $Rich_Web_VSlider_ID; ?>[0].css({ marginLeft: "-="+AutImgW+"" , transition: "all 1.0s ease"});
+									$thumbBank<?php echo $Rich_Web_VSlider_ID; ?>[0].css({ marginLeft: "-="+AutImgW+"" , transition: "all 1.0s ease", webkitTransition: "all 1.0s ease", MozTransition: "all 1.0s ease", msTransition: "all 1.0s ease", OTransition: "all 1.0s ease"});
 									currentScrollIndex<?php echo $Rich_Web_VSlider_ID; ?>++;
 								}
 							}
@@ -5787,10 +5848,10 @@
 						jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> .Rich_Web_TS_Play_Video_Div<?php echo $Rich_Web_VSlider_ID; ?>').css('height',Math.floor(SlHeight3/SlWidth3*jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()));
 						jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> #thumbcon<?php echo $Rich_Web_VSlider_ID; ?> .thumb').css('height',Math.floor(carDivImgHeight*jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()/(jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()+250)));
 						jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?>').css('height',Math.floor(carDivImgHeight*jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()/(jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()+250)+24));
-						jQuery('.Rich_Web_VSlider_TS_PlayIcon<?php echo $Rich_Web_VSlider_ID; ?> span').css('width',Math.floor(80*jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()/1000));
-						jQuery('.Rich_Web_VSlider_TS_PlayIcon<?php echo $Rich_Web_VSlider_ID; ?> span').css('height',Math.floor(50*jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()/1000));
-						jQuery('.Rich_Web_VSlider_TS_PlayIcon<?php echo $Rich_Web_VSlider_ID; ?> span').css('font-size',Math.floor(25*jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()/1000));
-						jQuery('.Rich_Web_VSlider_TS_PlayIcon<?php echo $Rich_Web_VSlider_ID; ?> span').css('line-height',Math.floor(50*jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()/1000)+'px');
+						jQuery('.Rich_Web_VSlider_TS_PlayIcon<?php echo $Rich_Web_VSlider_ID; ?> span').css('width',Math.floor(86*jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()/1000));
+						jQuery('.Rich_Web_VSlider_TS_PlayIcon<?php echo $Rich_Web_VSlider_ID; ?> span').css('height',Math.floor(61*jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()/1000));
+						jQuery('.Rich_Web_VSlider_TS_PlayIcon<?php echo $Rich_Web_VSlider_ID; ?> span').css('font-size',Math.floor(32*jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()/1000));
+						jQuery('.Rich_Web_VSlider_TS_PlayIcon<?php echo $Rich_Web_VSlider_ID; ?> span').css('line-height',Math.floor(64*jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()/1000)+'px');
 						jQuery('.Rich_Web_VSlider_TS_PlayIcon<?php echo $Rich_Web_VSlider_ID; ?>').css('height',Math.floor(50*jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()/1000));
 						jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> .ui-button').css('width',Math.floor(32*jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()/(jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()+250)));
 						jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?> #thumbnails<?php echo $Rich_Web_VSlider_ID; ?> .ui-button').css('height',Math.floor(32*jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()/(jQuery('#gallery-con<?php echo $Rich_Web_VSlider_ID; ?>').width()+250)));
@@ -6209,7 +6270,7 @@
 						position:relative;
 						margin:20px auto !important;
 						background-color:<?php echo $Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_VCCP_L_BgC; ?> !important;
-						z-index:999;
+						z-index:2;
 						width:100%;
 						padding-bottom:30%;
 						max-width:100% !important;
@@ -6966,9 +7027,10 @@
 						height:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Car_Icons_Size;?>px;
 						position:absolute;
 						bottom:0px;
-						z-index:9999;
+						z-index:2;
 						cursor:pointer;
 						border:none;
+						box-shadow:none !important;
 					}
 					.carousel<?php echo $Rich_Web_VSlider_ID; ?> .prev<?php echo $Rich_Web_VSlider_ID; ?>
 					{
@@ -6991,7 +7053,7 @@
 						-ms-transform:translateY(-50%);
 					}
 					.carousel<?php echo $Rich_Web_VSlider_ID; ?> li { display:none; padding:0px !important; background:none !important; margin:0px !important; }
-					.carousel<?php echo $Rich_Web_VSlider_ID; ?> li img { width:100%; height:100%; max-width:none;}
+					.carousel<?php echo $Rich_Web_VSlider_ID; ?> li img { width:100%; height:100%; max-width:none !important;}
 					.paging { position:absolute; z-index:9998; }
 					.paging > a { display:block; cursor:pointer; width:40px; height:40px; float:left; background:url(<?php echo plugins_url('/Images/dots.png',__FILE__);?>) 0px -40px no-repeat; }
 					.paging > a:hover,
@@ -7009,7 +7071,7 @@
 						-moz-transform:translateY(-50%);
 						-ms-transform:translateY(-50%);
 						height:0%;
-						z-index:99999999;
+						z-index:3;
 						-webkit-transition: all 500ms cubic-bezier(0.950, 0.050, 0.795, 0.035);
 						-moz-transition: all 500ms cubic-bezier(0.950, 0.050, 0.795, 0.035);
 						-o-transition: all 500ms cubic-bezier(0.950, 0.050, 0.795, 0.035);
@@ -7027,16 +7089,17 @@
 					{
 						position:fixed;
 						background:#fff;
-						left:50%;
 						width:0%;
-						top:50%;
 						border-radius:50%;
-						transform:translateY(-50%) translateX(-50%);
-						-webkit-transform:translateY(-50%) translateX(-50%);
-						-moz-transform:translateY(-50%) translateX(-50%);
-						-ms-transform:translateY(-50%) translateX(-50%);
 						height:0%;
 						z-index:99999999;
+						top:50%;
+						left:50%;
+						transform:translateY(-50%) translateX(-50%);
+						-webkit-transform:translateY(-50%) translateX(-50%);
+						-ms-transform:translateY(-50%) translateX(-50%);
+						-moz-transform:translateY(-50%) translateX(-50%);
+						-o-transform:translateY(-50%) translateX(-50%);
 						box-shadow:0px 0px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Box_Shadow;?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Shadow_Color;?>;
 						-moz-box-shadow:0px 0px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Box_Shadow;?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Shadow_Color;?>;
 						-webkit-box-shadow:0px 0px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Box_Shadow;?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Shadow_Color;?>;
@@ -7122,7 +7185,7 @@
 						right: 0px;
 						font-size: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Link_Font_Size;?>px;
 						font-family: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Link_Font_Family;?>;
-						color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Link_Color;?>;
+						color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Link_Color;?> !important;
 						background:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Link_Bg_Color;?>;
 						bottom: 0px;
 						border-radius:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Link_Border_Radius;?>px;
@@ -7139,11 +7202,12 @@
 						-moz-transition:all 0.4s linear;
 						-webkit-transition:all 0.4s linear;
 						z-index:9999;
+						box-shadow:none !important;
 					}
 					.popL<?php echo $Rich_Web_VSlider_ID; ?>:hover
 					{
 						background:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Link_Hov_Bg_Color;?>;
-						color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Link_Hov_Color;?>;
+						color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Link_Hov_Color;?> !important;
 						border: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Link_Border_Width;?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Link_Border_Style;?> <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Link_Hov_Border_Color;?>;
 						text-decoration:none;
 					}
@@ -7166,14 +7230,14 @@
 						width:100%;
 						margin-left:0%;
 						margin-top:0%;
-						max-width:none;
+						max-width:none !important;
 						transition:all 0.4s linear !important;
 						-webkit-transition:all 0.4s linear !important;
 						-ms-transition:all 0.4s linear !important;
 						-moz-transition:all 0.4s linear !important;
 						-o-transition:all 0.4s linear !important;
 					}
-					.fImgH1:hover { width:150%; height:150%; margin-left:-25%; margin-top:-25%; }
+					.fImgH1:hover { width:150%; height:150%; margin-left:-25%; margin-top:-25%;max-width:none !important; }
 					.fImgH2
 					{
 						position:relative;
@@ -7241,6 +7305,47 @@
 					}
 					.comment_content ul li:before, .entry-content ul li:before { display:none; }
 					.tit<?php echo $Rich_Web_VSlider_ID; ?> { text-transform:none !important; letter-spacing: inherit !important; }
+
+					.popDiv<?php echo $Rich_Web_VSlider_ID; ?>{
+						position:fixed;
+						top:0;
+						left:0;
+						width:100%;
+						height:100%;
+						z-index:7;
+					}
+					.popDiv<?php echo $Rich_Web_VSlider_ID; ?>_center{
+						display: -webkit-flex !important;
+            			display: flex !important;
+            			-webkit-justify-content: center; /* Safari 6.1+ */
+            			justify-content: center;
+            			-webkit-align-items: center;
+            			align-items: center;
+					}
+					.forPopp<?php echo $Rich_Web_VSlider_ID; ?>{
+						height:100% !important;
+					}
+					.figurForImg<?php echo $Rich_Web_VSlider_ID; ?>{
+						display: flex;
+						display: -webkit-flex;
+						justify-content: center;
+						align-items: center;
+					}
+					.figurForImg<?php echo $Rich_Web_VSlider_ID; ?> i{
+						display: block;
+						position: absolute;
+						color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Car_Bg_Color;?>;
+						opacity: 0.5;
+						z-index: 2;
+					}
+					.figurForImg<?php echo $Rich_Web_VSlider_ID; ?>:hover i{
+						opacity: 1;
+					}
+					@media (max-width: 767px){
+						.page-area{
+							transform: unset !important;
+						}
+					}
 				</style>
 				<div id="RW_Load_VCCP_Navigation<?php echo $Rich_Web_VSlider_ID; ?>" style="<?php if($Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_VCCP_Loading_Show == "on") { ?>display: block;<?php } else { ?>display: none;<?php } ?>">
 					<div class="center_content<?php echo $Rich_Web_VSlider_ID; ?>">
@@ -7335,6 +7440,7 @@
 							<li class='forPopp<?php echo $Rich_Web_VSlider_ID; ?>' onclick='popp<?php echo $Rich_Web_VSlider_ID; ?>("<?php echo $Rich_Web_VSlider_Videos[$i]->Rich_Web_VSldier_Add_Src;?>?rel=0&amp","<?php echo html_entity_decode($Rich_Web_VSlider_Videos[$i]->Rich_Web_VSlider_Vid_Title);?>","Rich_Web_VS_CP_Desc_<?php echo $Rich_Web_VSlider_ID;?>_<?php echo $i;?>","<?php echo $Rich_Web_VSlider_Videos[$i]->Rich_Web_VSldier_Add_Link;?>","<?php echo $Rich_Web_VSlider_Videos[$i]->Rich_Web_VSldier_Add_ONT;?>")'>
 								<div class="wrap<?php echo $Rich_Web_VSlider_ID; ?>">
 									<figure class='figurForImg<?php echo $Rich_Web_VSlider_ID; ?>'>
+										<i class="rich_web rich_web-play"></i>
 										<img class='vccp_img<?php echo $Rich_Web_VSlider_ID; ?> <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Car_Imgs_Hover_Type;?>' src="<?php echo $link_vd_sl;?>"/>
 										<input type="text" style="display: none;" id="Rich_Web_VS_CP_Desc_<?php echo $Rich_Web_VSlider_ID;?>_<?php echo $i;?>" value="<?php echo $Rich_Web_VSlider_Videos[$i]->Rich_Web_VSlider_Add_Desc;?>">
 									</figure>
@@ -7346,22 +7452,24 @@
 					</div>
 				</div>
 				<div class='popF1<?php echo $Rich_Web_VSlider_ID; ?>' onclick='delPopp<?php echo $Rich_Web_VSlider_ID; ?>()' style='background:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Overlay_Bg_Color;?>;'></div>
-				<div class='popVideo1<?php echo $Rich_Web_VSlider_ID; ?>' style='opacity:0;background:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Bg_Color;?>;border-style:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Border_Style;?>;border-color:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Border_Color;?>;'>
-					<i class='rich_web <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Icons_Type;?>' id='IconForPop<?php echo $Rich_Web_VSlider_ID; ?>' style='position:absolute;top:<?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Icons_Size/3*2;?>px;font-size:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Icons_Size;?>px;right:<?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Icons_Size/3*2;?>px;color:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Icons_Color;?>;cursor:pointer;z-index:2;display:none;' onclick='delPopp<?php echo $Rich_Web_VSlider_ID; ?>()'></i>
-					<div class='popVideo1<?php echo $Rich_Web_VSlider_ID; ?>_rel'>
-						<div class='vid'>
-							<iframe class='videoo<?php echo $Rich_Web_VSlider_ID; ?>' src="" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-							<a href='#' class='popL<?php echo $Rich_Web_VSlider_ID; ?>'>
-								<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Link_Text;?>
-							</a>
-							<span class='minTit<?php echo $Rich_Web_VSlider_ID; ?>' style='font-size:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Title_Font_Size;?>px;font-family:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Title_Font_Family;?>;color:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Title_Color;?>;'>
-							</span>
-						</div>
-						<div class='titleDescLink<?php echo $Rich_Web_VSlider_ID; ?>'>
-							<div class='titleDescLink<?php echo $Rich_Web_VSlider_ID; ?>_anim' style='background:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Desc_Bg_Color;?>;'>
-								<h2 class='tit<?php echo $Rich_Web_VSlider_ID; ?>' style='padding:0px;margin:0px;margin-bottom:20px;text-align:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Title_Text_Align;?>;font-size:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Title_Font_Size;?>px;font-family:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Title_Font_Family;?>;color:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Title_Color;?>;'>
-								</h2>
-								<p class='descr<?php echo $Rich_Web_VSlider_ID; ?>'></p>
+				<div class='popDiv<?php echo $Rich_Web_VSlider_ID; ?>' onclick='delPopp<?php echo $Rich_Web_VSlider_ID; ?>()' style="display:none;">
+					<div class='popVideo1<?php echo $Rich_Web_VSlider_ID; ?>' style='opacity:0;background:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Bg_Color;?>;border-style:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Border_Style;?>;border-color:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Border_Color;?>;'>
+						<i class='rich_web <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Icons_Type;?>' id='IconForPop<?php echo $Rich_Web_VSlider_ID; ?>' style='position:absolute;top:<?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Icons_Size/3*2;?>px;font-size:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Icons_Size;?>px;right:<?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Icons_Size/3*2;?>px;color:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Icons_Color;?>;cursor:pointer;z-index:2;display:none;' onclick='delPopp<?php echo $Rich_Web_VSlider_ID; ?>()'></i>
+						<div class='popVideo1<?php echo $Rich_Web_VSlider_ID; ?>_rel'>
+							<div class='vid'>
+								<iframe class='videoo<?php echo $Rich_Web_VSlider_ID; ?>' src="" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+								<a href='#' class='popL<?php echo $Rich_Web_VSlider_ID; ?>'>
+									<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Link_Text;?>
+								</a>
+								<span class='minTit<?php echo $Rich_Web_VSlider_ID; ?>' style='font-size:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Title_Font_Size;?>px;font-family:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Title_Font_Family;?>;color:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Title_Color;?>;'>
+								</span>
+							</div>
+							<div class='titleDescLink<?php echo $Rich_Web_VSlider_ID; ?>'>
+								<div class='titleDescLink<?php echo $Rich_Web_VSlider_ID; ?>_anim' style='background:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Desc_Bg_Color;?>;'>
+									<h2 class='tit<?php echo $Rich_Web_VSlider_ID; ?>' style='padding:0px;margin:0px;margin-bottom:20px;text-align:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Title_Text_Align;?>;font-size:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Title_Font_Size;?>px;font-family:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Title_Font_Family;?>;color:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Title_Color;?>;'>
+									</h2>
+									<p class='descr<?php echo $Rich_Web_VSlider_ID; ?>'></p>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -7377,11 +7485,11 @@
 					{
 						if(jQuery(window).width()<=1100)
 						{
-							jQuery('.tit<?php echo $Rich_Web_VSlider_ID; ?>').css('font-size',Math.floor(poppTitleFS*jQuery(window).width()/1100));
+							// jQuery('.tit<?php echo $Rich_Web_VSlider_ID; ?>').css('font-size',Math.floor(poppTitleFS*jQuery(window).width()/1100));
 							jQuery('.minTit<?php echo $Rich_Web_VSlider_ID; ?>').css('font-size',Math.floor(poppTitleFS*jQuery(window).width()/1100));
 							jQuery('.tit<?php echo $Rich_Web_VSlider_ID; ?>').css('margin-bottom',Math.floor(20*jQuery(window).width()/1100));
-							jQuery('.popL<?php echo $Rich_Web_VSlider_ID; ?>').css('font-size',Math.floor(poppLinkFS*jQuery(window).width()/1100));
-							jQuery('.popL<?php echo $Rich_Web_VSlider_ID; ?>').css('line-height',jQuery('.popL<?php echo $Rich_Web_VSlider_ID; ?>').css('font-size'));
+							// jQuery('.popL<?php echo $Rich_Web_VSlider_ID; ?>').css('font-size',Math.floor(poppLinkFS*jQuery(window).width()/1100));
+							jQuery('.popL<?php echo $Rich_Web_VSlider_ID; ?>').css('line-height',1);
 						}
 					}
 					jQuery(window).load(function(){ resp2<?php echo $Rich_Web_VSlider_ID; ?>(); })
@@ -7411,7 +7519,8 @@
 						jQuery('.tit<?php echo $Rich_Web_VSlider_ID; ?>').text(title);
 						jQuery('.descr<?php echo $Rich_Web_VSlider_ID; ?>').html(jQuery('#'+desc).val());
 						setTimeout(function(){
-							if(desc=='')
+							jQuery(".popDiv<?php echo $Rich_Web_VSlider_ID; ?>").addClass("popDiv<?php echo $Rich_Web_VSlider_ID; ?>_center")
+							if(jQuery('#'+desc).val()=='')
 							{
 								jQuery('.titleDescLink<?php echo $Rich_Web_VSlider_ID; ?>').css('display','none');
 								jQuery('.popVideo1<?php echo $Rich_Web_VSlider_ID; ?>').animate({"opacity":"1","height":"400px","width":"560px","max-width":"85%","border-radius":"0%",'max-height':Math.floor(jQuery(window).width()/2)+'px','border-width':'<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Border_Width;?>px'},400,function(){
@@ -7470,7 +7579,7 @@
 									jQuery('.vid').css('height','70%');
 									jQuery('.popVideo1<?php echo $Rich_Web_VSlider_ID; ?>').animate({'opacity':'1','height':'500px','width':'1000px','max-width':'85%','border-radius':'0%','max-height':Math.floor(jQuery(window).width()/3)+'px','border-width':'<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VC_Popup_Border_Width;?>px'},400,function(){
 										jQuery('.videoo<?php echo $Rich_Web_VSlider_ID; ?>').addClass('videoo<?php echo $Rich_Web_VSlider_ID; ?>_anim');
-										if(desc=='') { jQuery('.titleDescLink<?php echo $Rich_Web_VSlider_ID; ?>').css('display','none'); }
+										if(jQuery('#'+desc).val()=='') { jQuery('.titleDescLink<?php echo $Rich_Web_VSlider_ID; ?>').css('display','none'); }
 										else { jQuery('.titleDescLink<?php echo $Rich_Web_VSlider_ID; ?>_anim').addClass('titleDescLink<?php echo $Rich_Web_VSlider_ID; ?>_anim2'); }
 										if(link!='')
 										{
@@ -7505,19 +7614,39 @@
 							jQuery('.popVideo1<?php echo $Rich_Web_VSlider_ID; ?>').animate({'opacity':'0','height':'0px','width':'0px','max-width':'85%','border-radius':'50%','max-height':Math.floor(jQuery(window).width()/3)+'px','border-width':'0px',},100);
 						},150)
 						setTimeout(function(){
+							jQuery(".popDiv<?php echo $Rich_Web_VSlider_ID; ?>").removeClass("popDiv<?php echo $Rich_Web_VSlider_ID; ?>_center");
 							jQuery('.popF1<?php echo $Rich_Web_VSlider_ID; ?>').removeClass('popF1<?php echo $Rich_Web_VSlider_ID; ?>_1');
 							jQuery('.titleDescLink<?php echo $Rich_Web_VSlider_ID; ?>').css('display','block');
 							jQuery('.vid').css({'width':'50%','margin':'2%'})
 						},250)
 					}
+
+					jQuery(".popVideo1<?php echo $Rich_Web_VSlider_ID; ?>_rel").click(function(event){
+					    event.stopPropagation();
+					});
 				</script>
 				<script type="text/javascript">
+					jQuery(document).ready(function(){
+
+
 					var sum<?php echo $Rich_Web_VSlider_ID; ?>=0;
 					var imgCols<?php echo $Rich_Web_VSlider_ID; ?> = parseInt(jQuery('.imgCols<?php echo $Rich_Web_VSlider_ID; ?>').val());
 					var imgCount<?php echo $Rich_Web_VSlider_ID; ?> = parseInt(jQuery('.imgCount<?php echo $Rich_Web_VSlider_ID; ?>').val());
 					if(imgCount<?php echo $Rich_Web_VSlider_ID;?><imgCols<?php echo $Rich_Web_VSlider_ID; ?>) { sum<?php echo $Rich_Web_VSlider_ID;?>=imgCount<?php echo $Rich_Web_VSlider_ID;?>;}
 					else { sum<?php echo $Rich_Web_VSlider_ID;?>=imgCols<?php echo $Rich_Web_VSlider_ID; ?>; }
-					jQuery(window).load(function(){
+					// jQuery('.carousel<?php echo $Rich_Web_VSlider_ID; ?>[data-mixed] ul').anoSlide<?php echo $Rich_Web_VSlider_ID; ?>(
+					// 	{
+					// 		items<?php echo $Rich_Web_VSlider_ID; ?>: parseInt(sum<?php echo $Rich_Web_VSlider_ID; ?>),
+					// 		speed: 500,
+					// 		prev: 'a.prev<?php echo $Rich_Web_VSlider_ID; ?>[data-prev]',
+					// 		next: 'a.next<?php echo $Rich_Web_VSlider_ID; ?>[data-next]',
+					// 		lazy: true,
+					// 		delay: 100,
+					// 		onConstruct:	function(instance){},
+					// 			onStart:		function(ui){},
+					// 			onEnd:			function(ui){}
+					// 	})
+					jQuery(window).on("load resize",function(){
 						jQuery('.carousel<?php echo $Rich_Web_VSlider_ID; ?>[data-mixed] ul').anoSlide<?php echo $Rich_Web_VSlider_ID; ?>(
 						{
 							items<?php echo $Rich_Web_VSlider_ID; ?>: parseInt(sum<?php echo $Rich_Web_VSlider_ID; ?>),
@@ -7525,7 +7654,10 @@
 							prev: 'a.prev<?php echo $Rich_Web_VSlider_ID; ?>[data-prev]',
 							next: 'a.next<?php echo $Rich_Web_VSlider_ID; ?>[data-next]',
 							lazy: true,
-							delay: 100
+							delay: 100,
+							onConstruct:	function(instance){},
+								onStart:		function(ui){},
+								onEnd:			function(ui){}
 						})
 					})
 					jQuery(window).resize(function(){
@@ -7533,21 +7665,30 @@
 						{
 							items<?php echo $Rich_Web_VSlider_ID; ?>: parseInt(sum<?php echo $Rich_Web_VSlider_ID; ?>),
 							speed: 0,
+							auto:			0,
+							// autoStop:false,
 							prev: 'a.prev<?php echo $Rich_Web_VSlider_ID; ?>[data-prev]',
 							next: 'a.next<?php echo $Rich_Web_VSlider_ID; ?>[data-next]',
+							// responsiveAt:	480,
 							lazy: false,
 							delay: 0
 						})
 					})
+
 					function resp()
 					{
 						jQuery('.forPoppUll<?php echo $Rich_Web_VSlider_ID; ?>').css('min-height',Math.floor(jQuery('.forPopp<?php echo $Rich_Web_VSlider_ID; ?>').innerWidth()/1.853-3)+'px');
 						jQuery('.forPoppUll<?php echo $Rich_Web_VSlider_ID; ?>').css('max-height',Math.floor(jQuery('.forPopp<?php echo $Rich_Web_VSlider_ID; ?>').innerWidth()/1.853-3)+'px');
-						jQuery(".carousel<?php echo $Rich_Web_VSlider_ID; ?>").css("height","jQuery('.fImgH1').width()*16/9");
+						jQuery(".carousel<?php echo $Rich_Web_VSlider_ID; ?>").css("height","jQuery('.fImgH1,.fImgH2,.fImgH3,.fImgH4,.fImgH5').width()*16/9");
+						console.log(jQuery(".forPopp<?php echo $Rich_Web_VSlider_ID; ?>").width());
+						jQuery(".figurForImg<?php echo $Rich_Web_VSlider_ID; ?> i").css("font-size",jQuery(".forPopp<?php echo $Rich_Web_VSlider_ID; ?>").width()/10);
 					}
 					jQuery(window).load(function(){ resp(); })
 					jQuery(window).resize(function(){ resp(); })
+
+					})
 				</script>
+				
 			<?php }else if($Rich_Web_VSlider_Eff_Dat[0]->slider_Vid_type=='Simple Video Slider'){ ?>
 				<meta name="viewport" content="width=device-width, initial-scale=1">
 				<link rel="stylesheet" href="<?php echo plugins_url('/Style/Simple_Video_Slider.css',__FILE__);?>">
@@ -7576,7 +7717,7 @@
 						position:relative;
 						margin:20px auto !important;
 						background-color:<?php echo $Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_SimpleVS_L_BgC; ?> !important;
-						z-index:999;
+						z-index:2;
 						width:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_W;?>px;
 						height:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_W*56.25/100;?>px;
 						max-width:100% !important;
@@ -8308,6 +8449,7 @@
 					.RichWeb_SVS_<?php echo $Rich_Web_Video;?>
 					{
 						border: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_BW;?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_BS;?> <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_BC;?>;
+						box-sizing:border-box !important;
 						<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_BoxShShow=='on'){ ?>
 							<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_BoxShType=='on'){ ?>
 								-webkit-box-shadow: 0 38px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_BoxSh;?>px -18px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_BoxShC;?>;
@@ -8319,8 +8461,13 @@
 								box-shadow: 0px 0px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_BoxSh;?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_BoxShC;?>;
 							<?php }?>
 						<?php }?>
+						transition: none !important;
+						-webkit-transition: none !important;
+						-ms-transition: none !important;
+						-moz-transition: none !important;
+						-o-transition: none !important;
 					}
-					#Rich_Web_VS_SVS_<?php echo $Rich_Web_Video;?> { max-width: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_W;?>px; }
+					#Rich_Web_VS_SVS_<?php echo $Rich_Web_Video;?> { max-width: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_W;?>px; box-sizing:border-box !important; }
 					#Rich_Web_VS_SVS_<?php echo $Rich_Web_Video;?> .iis-bullet-nav
 					{
 						<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Nav_Show!='on'){ ?>
@@ -8336,6 +8483,11 @@
 						border-radius: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Nav_BR;?>px;
 						margin:0 <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Nav_PB;?>px;
 						background: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Nav_C;?>;
+						box-shadow: none !important;
+						-webkit-box-shadow: none !important;
+						-moz-box-shadow: none !important;
+						-o-box-shadow: none !important;
+						-ms-box-shadow: none !important;
 					}
 					#Rich_Web_VS_SVS_<?php echo $Rich_Web_Video;?> .iis-bullet-nav a.iis-bullet-active
 					{
@@ -8345,9 +8497,19 @@
 					{
 						background: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Nav_HC;?>;
 					}
+					#Rich_Web_VS_SVS_<?php echo $Rich_Web_Video;?>
+					{
+						position: relative;
+						z-index: 1;
+					}
+					.Rich_Web_VSlider_SVS_PlayIcon{
+						position: absolute;
+						z-index: 1 !important;
+					}
 					#Rich_Web_VS_SVS_<?php echo $Rich_Web_Video;?> .iis-caption
 					{
 						background: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_TBgC;?>;
+						
 					}
 					#Rich_Web_VS_SVS_<?php echo $Rich_Web_Video;?> .iis-caption .iis-caption-content span
 					{
@@ -8372,6 +8534,8 @@
 						font-family: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_LFF;?>;
 						text-decoration: none;
 						border: 0;
+						box-shadow:none !important;
+						outline: none !important;
 					}
 					#Rich_Web_VS_SVS_<?php echo $Rich_Web_Video;?> .iis-caption .iis-caption-content a:hover
 					{
@@ -8387,11 +8551,11 @@
 					{
 						position: absolute;
 						top: 50%;
-						z-index: 999999;
+						z-index: 31;
 						display:<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Arr_Show=='on'){ echo 'block !important';}else{ echo 'none !important';}?>;
 						text-align: center;
 						background: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Arr_BgC;?>;
-						color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Arr_C;?>;
+						color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Arr_C;?> !important;
 						padding: 10px 15px;
 						font-size: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Arr_S;?>px;
 						text-decoration: none;
@@ -8399,14 +8563,29 @@
 						border: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Arr_BW;?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Arr_BS;?> <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Arr_BC;?>;
 						border-radius: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Arr_BR;?>px;
 						opacity: 0;
+						box-shadow: none !important;
+						-webkit-box-shadow: none !important;
+						-moz-box-shadow: none !important;
+						-o-box-shadow: none !important;
+						-ms-box-shadow: none !important;
 						transform:translateY(-50%);
 						-webkit-transform:translateY(-50%);
 						-moz-transform:translateY(-50%);
 						-ms-transform:translateY(-50%);
+						transition: none !important;
+						-webkit-transition: none !important;
+						-ms-transition: none !important;
+						-moz-transition: none !important;
+						-o-transition: none !important;
 					}
 					.Rich_Web_SVS_Nav:hover
 					{
-						color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Arr_C;?>;
+						box-shadow: none !important;
+						-webkit-box-shadow: none !important;
+						-moz-box-shadow: none !important;
+						-o-box-shadow: none !important;
+						-ms-box-shadow: none !important;
+						color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Arr_C;?> !important;
 					}
 					.Rich_Web_SVS_Prev_<?php echo $Rich_Web_Video;?> { left: 2%; }
 					.Rich_Web_SVS_Next_<?php echo $Rich_Web_Video;?> { right: 2%; }
@@ -8415,28 +8594,31 @@
 					{
 						position: absolute;
 						top: 50%;
-						left: 0;
-						width: 100%;
-						height: 50px;
-						z-index: 9999;
+						left: 50%;
+						z-index: 1;
 						text-align: center;
-						transform:translateY(-50%);
-						-webkit-transform:translateY(-50%);
-						-moz-transform:translateY(-50%);
-						-ms-transform:translateY(-50%);
+						transform:translateY(-50%) translateX(-50%);
+						-webkit-transform:translateY(-50%) translateX(-50%);
+						-moz-transform:translateY(-50%) translateX(-50%);
+						-ms-transform:translateY(-50%) translateX(-50%);
 					}
 					.Rich_Web_VSlider_SVS_PlayIcon span
 					{
+						position: relative;
 						display: block;
 						text-align:center;
 						width: 80px;
-						height: 100%;
 						line-height: 50px;
 						margin: 0 auto;
 						background-color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_PIBgC;?>;
 						color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_PIC;?>;
 						border-radius: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_PIBR;?>px;
 						cursor: pointer;
+						top:50% !important;
+						transform:translateY(-50%);
+						-webkit-transform:translateY(-50%);
+						-moz-transform:translateY(-50%);
+						-ms-transform:translateY(-50%);
 					}
 					.RichWeb_SVS_<?php echo $Rich_Web_Video;?>:hover .Rich_Web_VSlider_SVS_PlayIcon span
 					{
@@ -8452,6 +8634,11 @@
 					{
 						background-color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_TC;?>;
 						outline: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_TC;?>;
+					}
+					@media screen and (max-width:820px){
+						.Rich_Web_SVS_Nav,#Rich_Web_VS_SVS_<?php echo $Rich_Web_Video;?> .iis-bullet-nav a,.Rich_Web_VSlider_SVS_PlayIcon span{
+							cursor:default !important;
+						}
 					}
 				</style>
 				<div id="RW_Load_SVS_Navigation<?php echo $Rich_Web_VSlider_ID; ?>" style="<?php if($Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_SimpleVS_Loading_Show == "on") { ?>display: block;<?php } else { ?>display: none;<?php } ?>">
@@ -8580,7 +8767,7 @@
 					<a class="Rich_Web_SVS_Nav Rich_Web_SVS_Next Rich_Web_SVS_Next_<?php echo $Rich_Web_Video;?>" onclick="RIch_Web_SVS_Close_Video(<?php echo $Rich_Web_Video;?>)"><i class='rich_web rich_web-<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_Arr_Type;?>-right' ></i></a>
 					<iframe src="" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 					<div class="Rich_Web_VSlider_SVS_PlayIcon" >
-						<span onclick="RIch_Web_SVS_Play_Video(<?php echo $Rich_Web_Video;?>)"> ►</span>
+						<span onclick="RIch_Web_SVS_Play_Video(<?php echo $Rich_Web_Video;?>)"> <i class="rich_web rich_web-play"></i></span>
 					</div>
 				</div>
 				<input type='text' style='display:none;' class='RichVSTitle<?php echo $Rich_Web_VSlider_ID; ?>' value='<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_TFS;?>'>
@@ -8906,7 +9093,7 @@
 							this.settings = {
 								selector: '',
 								height: '16:9', // "auto" | px value (e.g. 400) | aspect ratio (e.g. "16:9")
-								initialHeight: 400, // for "auto" and aspect ratio
+								initialHeight: Math.floor(jQuery("#RW_Load_SVS_Navigation<?php echo $Rich_Web_VSlider_ID; ?>").width()*56.25/100-<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_BW;?>), // for "auto" and aspect ratio
 								maxHeight: null, // for "auto" and aspect ratio
 								interval: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_PT*1000;?>,
 								transitionDuration: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_SVS_CS;?>,
@@ -9266,6 +9453,7 @@
 								jQuery('.iis-caption .iis-caption-content a').css('display','block');
 							}
 						}
+						
 						jQuery(window).load(function(){ resp(); })
 						jQuery(window).resize(function(){ resp(); })
 						var array_svs<?php echo $Rich_Web_VSlider_ID; ?>=[];
@@ -9739,10 +9927,15 @@
 								refSize = Math.min(refSize, <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_H*16/9+240;?>);
 								refSize = Math.max(refSize, 240);
 								Rich_Web_VSVT<?php echo $Rich_Web_VSlider_ID; ?>_slider.$ScaleWidth(refSize);
+								console.log(refSize)
 							}
-							else { window.setTimeout(ScaleSlider, 30); }
+							else { window.setTimeout(ScaleSlider, 30);  }
 						}
+
 						ScaleSlider();
+						jQuery(".jssora05r").click(function(){
+							ScaleSlider();
+						})
 						$Jssor$.$AddEvent(window, "load", ScaleSlider);
 						$Jssor$.$AddEvent(window, "resize", ScaleSlider);
 						$Jssor$.$AddEvent(window, "orientationchange", ScaleSlider);
@@ -9773,7 +9966,7 @@
 						position:relative;
 						margin:20px auto !important;
 						background-color:<?php echo $Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_VSVT_L_BgC; ?> !important;
-						z-index:999;
+						z-index:2;
 						width:750px;
 						height:375px;
 						max-width:100% !important;
@@ -10544,10 +10737,36 @@
 						<?php }else{ ?>
 							top: 41%;
 						<?php }?>
+						-webkit-transition: all 0s !important;
+						-ms-transition: all 0s !important;
+						-moz-transition: all 0s !important;
+						-o-transition: all 0s !important;
+						transition: all 0s !important;
 					}
 					.jssora05r i { float: right; }
 					.jssora05l i { float: left; }
 					.jssora05l:hover, .jssora05r:hover { opacity: 0.8; }
+					div[data-u="thumbnavigator"]{
+						overflow-x:hidden;
+						top:0px !important;
+
+					}
+					div[data-u="thumbnavigator"]::-webkit-scrollbar { width: 0.5em; }
+					div[data-u="thumbnavigator"]::-webkit-scrollbar-track
+					{
+						-webkit-box-shadow: inset 0 0 6px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BgC;?>;
+					}
+					div[data-u="thumbnavigator"]::-webkit-scrollbar-thumb
+					{
+						background-color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_Th_HBC;?>;
+						outline: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_Th_HBC;?>;
+					}
+					div[data-u="thumbnavigator"]>div{
+						height:auto !important;
+					}
+					div[data-u="slides"]{
+						overflow:visible !important;
+					}
 					.jssort01-99-66
 					{
 						background-color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BgC;?>;
@@ -10555,7 +10774,14 @@
 						left:0px;
 						top:0px;
 						width:240px;
-						height:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_H;?>px;
+						height:100% !important;
+					}
+					.jssort01-99-66>div{
+						top:0px !important;
+						padding-top: 5px !important;
+					    box-sizing: border-box;
+					    -moz-box-sizing: border-box;
+					    -webkit-box-sizing: border-box;
 					}
 					.jssort01-99-66 .p
 					{
@@ -10564,13 +10790,13 @@
 						left: 0;
 						width: 99px;
 						height: 66px;
-						border: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_Th_BW;?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_Th_BS;?> <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_Th_BC;?>;
+						border: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_Th_BW;?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_Th_BS;?> <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_Th_BC;?> !important;
 						border-radius: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_Th_BR;?>px;
 						box-sizing:border-box !important;
 					}
 					.jssort01-99-66 .p:hover, .jssort01-99-66 .p.pdn, .jssort01-99-66 .pav
 					{
-						border-color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_Th_HBC;?>;
+						border-color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_Th_HBC;?> !important;
 					}
 					.jssort01-99-66 .w  img
 					{
@@ -10607,23 +10833,23 @@
 					{
 						position: absolute;
 						<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_LPos=='top-left'){ ?>
-							left: 0;
-							top: 0;
+							left: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
+							top: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
 							border-bottom-right-radius: 70px;
 							padding: 10px 20px 20px 10px;
 						<?php }else if($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_LPos=='top-right'){ ?>
-							right: 0;
-							top: 0;
+							right: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
+							top: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
 							border-bottom-left-radius: 70px;
 							padding: 10px 10px 20px 20px;
 						<?php }else if($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_LPos=='bottom-left'){ ?>
-							left: 0;
-							bottom: 0;
+							left: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
+							bottom: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
 							border-top-right-radius: 70px;
 							padding: 20px 20px 10px 10px;
 						<?php }else{ ?> 
-							right: 0;
-							bottom: 0;
+							right: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
+							bottom: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
 							border-top-left-radius: 70px;
 							padding: 20px 10px 10px 20px;
 						<?php }?>
@@ -10643,28 +10869,30 @@
 					{
 						color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_LC;?>;
 						text-decoration: none;
+						box-shadow: none !important;
+						border: none !important;
 					}
 					.Rich_Web_VS_VTS_Play<?php echo $Rich_Web_VSlider_ID; ?>
 					{
 						position: absolute;
 						<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_PPos=='top-left'){ ?>
-							left: 0;
-							top: 0;
+							left: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
+							top: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
 							border-bottom-right-radius: 70px;
 							padding: 10px 20px 20px 15px;
 						<?php }else if($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_PPos=='top-right'){ ?>
-							right: 0;
-							top: 0;
+							right: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
+							top: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
 							border-bottom-left-radius: 70px;
 							padding: 10px 15px 20px 20px;
 						<?php }else if($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_PPos=='bottom-left'){ ?>
-							left: 0;
-							bottom: 0;
+							left: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
+							bottom: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
 							border-top-right-radius: 70px;
 							padding: 20px 20px 10px 15px;
 						<?php }else{ ?> 
-							right: 0;
-							bottom: 0;
+							right: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
+							bottom: <?php echo -$Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW/($Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_BW+1);?>px;
 							border-top-left-radius: 70px;
 							padding: 20px 15px 10px 20px;
 						<?php }?>
@@ -10724,6 +10952,12 @@
 					{
 						width: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_H*16/9;?>px;
 						height: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VTVS_H;?>px;
+					}
+
+					@media screen and (max-width:820px){
+						.jssora05l, .jssora05r,.Rich_Web_VS_VTS_Play<?php echo $Rich_Web_VSlider_ID; ?>,.rich_web-link{
+							cursor:default !important;
+						}
 					}
 				</style>
 				<div id="RW_Load_VSVT_Navigation<?php echo $Rich_Web_VSlider_ID; ?>" style="<?php if($Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_VSVT_Loading_Show == "on") { ?>display: block;<?php } else { ?>display: none;<?php } ?>">
@@ -10929,7 +11163,7 @@
 						position:relative;
 						margin:20px auto !important;
 						background-color:<?php echo $Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_HSL_L_BgC; ?> !important;
-						z-index:999;
+						z-index:2;
 						width:100%;
 						padding-bottom:40%;
 						max-width:100% !important;
@@ -11666,8 +11900,7 @@
 						margin: 25px auto;
 						font-size: 62.5%;
 						line-height: 1;
-						padding: 25px 0px;
-						padding: 2px 3px;
+						padding: 0px 4px;
 						overflow:hidden;
 					}
 					.crsl-items<?php echo $Rich_Web_VSlider_ID; ?> { display: block; padding: 4px; overflow: visible !important;}
@@ -11692,7 +11925,7 @@
 						-moz-transition: all 0.3s linear;
 						transition: all 0.3s linear;
 					}
-					.crsl-item<?php echo $Rich_Web_VSlider_ID; ?> p.readmore a { display: block; float: right; text-decoration: none; }
+					.crsl-item<?php echo $Rich_Web_VSlider_ID; ?> p.readmore a { display: block; float: right; text-decoration: none; border: none !important; }
 					.Rich_Web_VS_HPS<?php echo $Rich_Web_VSlider_ID; ?>_Nav { display: block; text-align: center; margin-bottom: 5px; }
 					.Rich_Web_VS_HPS<?php echo $Rich_Web_VSlider_ID; ?>_Nav a { display: inline-block; padding: 5px 10px; margin-right: 8px; text-decoration: none; outline:none !important; }
 					@media screen and (max-width: 660px) { h1 { font-size: 2.4em; line-height: 1.2em; } .crsl-item<?php echo $Rich_Web_VSlider_ID; ?> h3 { font-size: 1.65em; } }
@@ -11712,6 +11945,11 @@
 						-webkit-border-radius: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_HPS_NP_BR;?>px;
 						-moz-border-radius: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_HPS_NP_BR;?>px;
 						border-radius: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_VS_HPS_NP_BR;?>px;
+						-webkit-box-shadow: none !important;
+						-ms-box-shadow: none !important;
+						-moz-box-shadow: none !important;
+						-o-box-shadow: none !important;
+						box-shadow: none !important;
 					}
 					.Rich_Web_VS_HPS<?php echo $Rich_Web_VSlider_ID; ?>_Nav a:hover
 					{
@@ -11898,6 +12136,9 @@
 					}
 					.Rich_Web_VS_HPS<?php echo $Rich_Web_VSlider_ID; ?>_Overlay_Close:hover { opacity: 0.8; }
 					.crsl-items<?php echo $Rich_Web_VSlider_ID; ?>{ box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; }
+					@media screen and (max-width: 820px){
+						.crsl-item<?php echo $Rich_Web_VSlider_ID; ?> .thumbnail { cursor: default !important; }
+					}
 				</style>
 				<div id="RW_Load_Horizontal_Navigation<?php echo $Rich_Web_VSlider_ID; ?>" style="<?php if($Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_HSL_Loading_Show == "on") { ?>display: block;<?php } else { ?>display: none;<?php } ?>">
 					<div class="center_content<?php echo $Rich_Web_VSlider_ID; ?>">
@@ -12099,7 +12340,7 @@
 						position:relative;
 						margin:20px auto !important;
 						background-color:<?php echo $Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_RichSl_L_BgC; ?> !important;
-						z-index:999;
+						z-index:2;
 						width:750px;
 						padding-bottom:50%;
 						max-width:100% !important;
@@ -12962,7 +13203,7 @@
 						background: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_RVVS_DelIc_BgC; ?> !important;
 						cursor: pointer;
 						border-radius: 4px;
-						text-decoration: none;
+						text-decoration: none !important;
 					}
 					.rw_rvs-close:hover
 					{
@@ -13121,8 +13362,10 @@
 				<script type="text/javascript" src="<?php echo plugins_url('/Scripts/rvslider.min.js',__FILE__);?>"></script>
 				<script type="text/javascript">
 					jQuery(document).ready(function(){
+
 						function resp(){
-							jQuery('.rvs-container').css('height',Math.floor(jQuery('.rvs-item-container').width()*9/16));
+							jQuery('.rvs-container<?php echo $Rich_Web_VSlider_ID; ?>').css('height',"0px");
+							jQuery('.rvs-container<?php echo $Rich_Web_VSlider_ID; ?>').css('height',Math.floor(jQuery('.rvs-item-container').width()*9/16));
 							if(jQuery(".rvs-container<?php echo $Rich_Web_VSlider_ID; ?>").width()<=500){
 								jQuery(".rvs-container<?php echo $Rich_Web_VSlider_ID; ?>").addClass("rvs-container<?php echo $Rich_Web_VSlider_ID; ?>_mobile");
 								jQuery(".rvs-container<?php echo $Rich_Web_VSlider_ID; ?>").css("padding-right","0px");
@@ -13136,7 +13379,8 @@
 								jQuery(".rvs-item-stage<?php echo $Rich_Web_VSlider_ID; ?>").css("height",Math.floor(jQuery(".rvs-container<?php echo $Rich_Web_VSlider_ID; ?>").width()*3/4));
 							}
 						}
-						jQuery(window).load(function(){ resp(); })
+
+						jQuery(window).on("load resize",function(){ resp(); })
 						setTimeout(function(){ resp(); },1000)
 						jQuery(window).resize(function(){ resp(); })
 						var array_rich<?php echo $Rich_Web_VSlider_ID; ?>=[];
@@ -13159,7 +13403,7 @@
 				</script>
 				<script>
 					jQuery(document).ready(function($){
-						setTimeout(function(){ $('.rvs-container<?php echo $Rich_Web_VSlider_ID; ?>').rvslider1(); },500)
+						setTimeout(function(){ $('.rvs-container<?php echo $Rich_Web_VSlider_ID; ?>').rvslider1(); },1000)
 					});
 				</script>
 			<?php } else if ($Rich_Web_VSlider_Eff_Dat[0]->slider_Vid_type=='TimeLine Slider') { ?>
@@ -13188,7 +13432,7 @@
 						position:relative;
 						margin:20px auto !important;
 						background-color:<?php echo $Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_TSL_L_BgC; ?> !important;
-						z-index:999;
+						z-index:2;
 						width:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_W; ?>px;
 						height:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_W*56.25/100; ?>px;
 						max-width:100% !important;
@@ -13997,7 +14241,7 @@
 						.sociales<?php echo $Rich_Web_VSlider_ID; ?> { text-align: center; margin-bottom: 20px; }
 						#timeline_r<?php echo $Rich_Web_VSlider_ID; ?>w { overflow: hidden; margin: 20px auto !important; position: relative; }
 						#date<?php echo $Rich_Web_VSlider_ID; ?>s { height: 55px; overflow: hidden; border:none !important; }
-						#date<?php echo $Rich_Web_VSlider_ID; ?>s li { list-style: none; float: left; height: 50px; font-size: 24px; text-align: center; padding: 0px !important; }
+						#date<?php echo $Rich_Web_VSlider_ID; ?>s li { list-style: none; list-style-type: none !important; float: left; height: 50px; font-size: 24px; text-align: center; padding: 0px !important; }
 						#date<?php echo $Rich_Web_VSlider_ID; ?>s a
 						{
 							padding-bottom: 10px;
@@ -14007,7 +14251,7 @@
 							line-height: 1 !important;
 						}
 						#issue<?php echo $Rich_Web_VSlider_ID; ?>s { overflow: hidden; }
-						#issue<?php echo $Rich_Web_VSlider_ID; ?>s li { list-style: none; float: left; padding: 0px !important; }
+						#issue<?php echo $Rich_Web_VSlider_ID; ?>s li { list-style: none; list-style-type: none !important; float: left; padding: 0px !important; }
 						#issue<?php echo $Rich_Web_VSlider_ID; ?>s li:before { content:"" !important; }
 						#date<?php echo $Rich_Web_VSlider_ID; ?>s li:before { content:"" !important; }
 						#issue<?php echo $Rich_Web_VSlider_ID; ?>s li.select<?php echo $Rich_Web_VSlider_ID; ?>ed .RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?>
@@ -14026,38 +14270,40 @@
 						}
 						#issue<?php echo $Rich_Web_VSlider_ID; ?>s li .RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?>
 						{
+							backface-visibility: hidden;
 							float: left;
 							margin: 10px 30px 10px 30px;
 							cursor:pointer;
 							display:inline-block !important;
-							overflow:hidden !important;
 							perspective:800px !important;
 							-webkit-perspective:800px !important;
 							-ms-perspective:800px !important;
 							-moz-perspective:800px !important;
 							-o-perspective:800px !important;
-							-webkit-transition: all 0.8s ease-in-out;
-							-moz-transition: all 0.8s ease-in-out;
-							-o-transition: all 0.8s ease-in-out;
-							-ms-transition: all 0.8s ease-in-out; 
-							transition: all 0.8s ease-in-out;
-							-webkit-transform: scale(0.7,0.7);
-							-moz-transform: scale(0.7,0.7);
-							-o-transform: scale(0.7,0.7);
-							-ms-transform: scale(0.7,0.7);
-							transform: scale(0.7,0.7);
+							-webkit-transform: scale(1.1,1.1);
+							-moz-transform: scale(1.1,1.1);
+							-o-transform: scale(1.1,1.1);
+							-ms-transform: scale(1.1,1.1);
+							transform: scale(1.1,1.1);
+							transform-origin : left top;
+							-webkit-transform-origin : left top;
+							-ms-transform-origin : left top;
+							-moz-transform-origin : left top;
+							-o-transform-origin : left top;
 						}
 						#issue<?php echo $Rich_Web_VSlider_ID; ?>s li .RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?> .RW_tim_vid_vid { width:100% !important; height:100% !important; }
 						#issue<?php echo $Rich_Web_VSlider_ID; ?>s li .RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?> img
 						{
 							-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)";
+							-moz-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)";
+							-webkit-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)";
 							filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);
 							zoom: 1;
-							transition:all 0.4s linear !important;
+							/*transition:all 0.4s linear !important;
 							-webkit-transition:all 0.4s linear !important;
 							-ms-transition:all 0.4s linear !important;
 							-moz-transition:all 0.4s linear !important;
-							-o-transition:all 0.4s linear !important;
+							-o-transition:all 0.4s linear !important;*/
 						}
 						#issue<?php echo $Rich_Web_VSlider_ID; ?>s li p { margin:0 15px 0 0 !important; line-height: 1 !important; }
 						#nex<?php echo $Rich_Web_VSlider_ID; ?>t, #pre<?php echo $Rich_Web_VSlider_ID; ?>v
@@ -14131,6 +14377,7 @@
 							max-width:150% !important;
 							z-index:1 !important;
 						}
+						
 						#date<?php echo $Rich_Web_VSlider_ID; ?>s,#issue<?php echo $Rich_Web_VSlider_ID; ?>s { padding:0px !important; margin-bottom:0px !important; }
 						#issue<?php echo $Rich_Web_VSlider_ID; ?>s { height:calc(100% - <?php echo 55 + $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Ic_S + 10; ?>px) !important; }
 						.RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?> { position:relative; }
@@ -14201,7 +14448,7 @@
 							outline: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_T_C; ?> !important;
 						}
 						.rw_tim_tit_width<?php echo $Rich_Web_VSlider_ID; ?> { min-width:150px !important; width:250px; text-align:center; position: relative; }
-						.RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?>
+						.RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?> .rw_resp_div<?php echo $Rich_Web_VSlider_ID; ?>
 						{
 							box-sizing:border-box !important;
 							-moz-box-sizing:border-box !important;
@@ -14210,14 +14457,14 @@
 							background:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_BC; ?> !important;
 						}
 						<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_ShT == "Type 1") { ?>
-							.RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?>
+							.RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?> .rw_resp_div<?php echo $Rich_Web_VSlider_ID; ?>
 							{
 								box-shadow:0px 0px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_BSh; ?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_ShC; ?> !important;
 								-moz-box-shadow:0px 0px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_BSh; ?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_ShC; ?> !important;
 								-webkit-box-shadow:0px 0px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_BSh; ?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_ShC; ?> !important;
 							}
 						<?php } else { ?>
-							.RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?>
+							.RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?> .rw_resp_div<?php echo $Rich_Web_VSlider_ID; ?>
 							{
 								box-shadow:0px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_BSh/2; ?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_BSh; ?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_ShC; ?> !important;
 								-moz-box-shadow:0px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_BSh/2; ?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_BSh; ?>px <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_ShC; ?> !important;
@@ -14231,6 +14478,7 @@
 							left:50%;
 							z-index:2 !important;
 							border-radius:4px;
+
 							color:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_PlIc_C; ?> !important;
 							background-color:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_PlIc_BgC; ?> !important;
 							transform:translateY(-50%) translateX(-50%);
@@ -14462,14 +14710,40 @@
 							height:auto !important;
 						}
 						.RW_tim_vid_video { position:absolute; top:0px !important; left:0px !important; width:100% !important; height:100% !important; }
-						.rw_resp_div<?php echo $Rich_Web_VSlider_ID; ?>
+						#issue<?php echo $Rich_Web_VSlider_ID; ?>s li .RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?>{
+							/*height:100% !important;*/
+						}
+						#issue<?php echo $Rich_Web_VSlider_ID; ?>s li .RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?> .rw_resp_div<?php echo $Rich_Web_VSlider_ID; ?>
 						{
 							position: relative !important;
-							width: 100% !important;
-							padding-bottom: 56.25% !important;
+							width: 0% !important;
+							padding-bottom: 0% !important;
 							height:0px !important;
 							overflow:hidden !important;
+							top:20%;
+							left:50%;
 							background:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Img_BC; ?> !important;
+							-webkit-perspective-origin: 20% 30%;
+							-ms-perspective-origin: 20% 30%;
+							-moz-perspective-origin: 20% 30%;
+							-o-perspective-origin: 20% 30%;
+							perspective-origin: 20% 30%;
+							-webkit-transition:all 0.8s ease-in-out;
+							-ms-transition:all 0.8s ease-in-out;
+							-moz-transition:all 0.8s ease-in-out;
+							-o-transition:all 0.8s ease-in-out;
+							transition:all 0.8s ease-in-out;
+						}
+						#issue<?php echo $Rich_Web_VSlider_ID; ?>s li.select<?php echo $Rich_Web_VSlider_ID; ?>ed .RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?> .rw_resp_div<?php echo $Rich_Web_VSlider_ID; ?>{
+							top:0;
+							left:0;
+							width: 100% !important;
+							padding-bottom: 56.25% !important;
+							-webkit-perspective-origin: left top;
+							-ms-perspective-origin: left top;
+							-moz-perspective-origin: left top;
+							-o-perspective-origin: left top;
+							perspective-origin: left top;
 						}
 					</style>
 					<div id="timeline_r<?php echo $Rich_Web_VSlider_ID; ?>w" style="display:none;">
@@ -14509,7 +14783,7 @@
 										<div class="rw_resp_div<?php echo $Rich_Web_VSlider_ID; ?>" name="<?php echo $Rich_Web_VSlider_Videos[$i]->Rich_Web_VSldier_Add_Src;?>">
 											<i class="RW_tim_vid_play<?php echo $Rich_Web_VSlider_ID; ?> <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_PlIc_T; ?>" ></i>
 											<img class="RW_tim_vid_vid RW_tim_vid_vid<?php echo $Rich_Web_VSlider_ID; ?>" src="<?php echo $link_vd_sl;?>" />
-											<iframe class="RW_tim_vid_video" src="<?php echo $Rich_Web_VSlider_Videos[$i]->Rich_Web_VSldier_Add_Src;?>" style='width:100%;height:100%;' frameborder="0" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true"></iframe>
+											<iframe class="RW_tim_vid_video" src="" style='width:100%;height:100%;' frameborder="0" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true"></iframe>
 										</div>
 									</div>
 									<div class="rw_content_div<?php echo $Rich_Web_VSlider_ID; ?>">
@@ -14526,7 +14800,7 @@
 					<input type="text" style="display:none;" class="Rich_Web_MS_Sl1EfT<?php echo $Rich_Web_VSlider_ID; ?>" value="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Sl1EfT; ?>">
 					<input type="text" style="display:none;" class="Rich_Web_MS_PlIc_S<?php echo $Rich_Web_VSlider_ID; ?>" value="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_PlIc_S; ?>">
 					<script type="text/javascript">
-						jQuery(document).ready(function(){
+						// jQuery(document).ready(function(){
 							jQuery(".rw_tim_nav€_item<?php echo $Rich_Web_VSlider_ID; ?>.select<?php echo $Rich_Web_VSlider_ID; ?>ed").parent().find(".rw_circle_tim<?php echo $Rich_Web_VSlider_ID; ?>").css("border-color","red");
 							var top<?php echo $Rich_Web_VSlider_ID; ?> = jQuery(".rw_resp_li<?php echo $Rich_Web_VSlider_ID; ?>").offset().top;
 							var left<?php echo $Rich_Web_VSlider_ID; ?> = jQuery(".rw_resp_li<?php echo $Rich_Web_VSlider_ID; ?>").offset().left;
@@ -14615,10 +14889,12 @@
 									jQuery(".RW_tim_vid_video").css("opacity","0");
 								}
 							}
-							setTimeout(function(){ resp<?php echo $Rich_Web_VSlider_ID; ?>(); },100)
+							// setTimeout(function(){ resp<?php echo $Rich_Web_VSlider_ID; ?>(); },100)
 							resp<?php echo $Rich_Web_VSlider_ID; ?>();
-							jQuery(window).resize(function(){ resp<?php echo $Rich_Web_VSlider_ID; ?>(); })
-						})
+							// jQuery(window).on("resize",function(){ resp<?php echo $Rich_Web_VSlider_ID; ?>(); })
+							jQuery(window).on("load resize",function(){ resp<?php echo $Rich_Web_VSlider_ID; ?>(); })
+
+						// })
 					</script>
 				<?php } else { ?>
 					<style>
@@ -14937,7 +15213,7 @@
 								<li class="rw_tim_li<?php echo $Rich_Web_VSlider_ID; ?>" id="<?php echo html_entity_decode($Rich_Web_VSlider_Videos[$i]->Rich_Web_VSlider_Vid_Title);?><?php echo $Rich_Web_VSlider_ID; ?>" class="select<?php echo $Rich_Web_VSlider_ID; ?>ed">
 									<div class="rw_cont_tim<?php echo $Rich_Web_VSlider_ID; ?>">
 										<div class="rw_vid_tim<?php echo $Rich_Web_VSlider_ID; ?>">
-											<iframe class="rw_vid_tim<?php echo $Rich_Web_VSlider_ID; ?>_video" src="<?php echo $Rich_Web_VSlider_Videos[$i]->Rich_Web_VSldier_Add_Src;?>"  frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+											<iframe class="rw_vid_tim<?php echo $Rich_Web_VSlider_ID; ?>_video" src=""  frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 											<img src="<?php echo $link_vd_sl;?>" class="RW_tim_vid_vid<?php echo $Rich_Web_VSlider_ID; ?> rw_vid_tim<?php echo $Rich_Web_VSlider_ID; ?>_img" />
 											<i class="rw_vid_tim<?php echo $Rich_Web_VSlider_ID; ?>_play <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_PlIc_T; ?>" name="<?php echo $Rich_Web_VSlider_Videos[$i]->Rich_Web_VSldier_Add_Src;?>"></i>
 										</div>
@@ -14951,7 +15227,7 @@
 							<li class="rw_tim_li<?php echo $Rich_Web_VSlider_ID; ?>" id="<?php echo html_entity_decode($Rich_Web_VSlider_Videos[$i]->Rich_Web_VSlider_Vid_Title);?><?php echo $Rich_Web_VSlider_ID; ?>">
 								<div class="rw_cont_tim<?php echo $Rich_Web_VSlider_ID; ?>">
 									<div class="rw_vid_tim<?php echo $Rich_Web_VSlider_ID; ?>">
-										<iframe class="rw_vid_tim<?php echo $Rich_Web_VSlider_ID; ?>_video" src="<?php echo $Rich_Web_VSlider_Videos[$i]->Rich_Web_VSldier_Add_Src;?>" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+										<iframe class="rw_vid_tim<?php echo $Rich_Web_VSlider_ID; ?>_video" src="" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 										<img src="<?php echo $link_vd_sl;?>" class="RW_tim_vid_vid<?php echo $Rich_Web_VSlider_ID; ?> rw_vid_tim<?php echo $Rich_Web_VSlider_ID; ?>_img" />
 										<i class="rw_vid_tim<?php echo $Rich_Web_VSlider_ID; ?>_play <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_PlIc_T; ?>" name="<?php echo $Rich_Web_VSlider_Videos[$i]->Rich_Web_VSldier_Add_Src;?>"></i>
 									</div>
@@ -14997,6 +15273,9 @@
 							}
 						}
 						resp<?php echo $Rich_Web_VSlider_ID; ?>();
+						jQuery(window).on("load resize",function(){
+							resp<?php echo $Rich_Web_VSlider_ID; ?>();
+						})
 						setTimeout(function(){ resp<?php echo $Rich_Web_VSlider_ID; ?>(); },100)
 						jQuery(window).resize(function(){ resp<?php echo $Rich_Web_VSlider_ID; ?>(); })
 						jQuery(".rw_vid_tim<?php echo $Rich_Web_VSlider_ID; ?>_video").attr("src","");
@@ -15067,6 +15346,9 @@
 									jQuery(setting<?php echo $Rich_Web_VSlider_ID; ?>s.date<?php echo $Rich_Web_VSlider_ID; ?>sDiv<?php echo $Rich_Web_VSlider_ID; ?>).height(heightDate*howManydate<?php echo $Rich_Web_VSlider_ID; ?>s).css('marginTop',heightContainer/2-heightDate/2);
 									var defaultPositiondate<?php echo $Rich_Web_VSlider_ID; ?>s = parseInt(jQuery(setting<?php echo $Rich_Web_VSlider_ID; ?>s.date<?php echo $Rich_Web_VSlider_ID; ?>sDiv<?php echo $Rich_Web_VSlider_ID; ?>).css('marginTop').substring(0,jQuery(setting<?php echo $Rich_Web_VSlider_ID; ?>s.date<?php echo $Rich_Web_VSlider_ID; ?>sDiv<?php echo $Rich_Web_VSlider_ID; ?>).css('marginTop').indexOf('px')));
 								}
+								
+								
+
 								jQuery(setting<?php echo $Rich_Web_VSlider_ID; ?>s.date<?php echo $Rich_Web_VSlider_ID; ?>sDiv<?php echo $Rich_Web_VSlider_ID; ?>+' .rw_tim_nav€_item<?php echo $Rich_Web_VSlider_ID; ?>').click(function(event){
 									x=false;
 									event.preventDefault();
@@ -15080,6 +15362,9 @@
 									{
 										jQuery(setting<?php echo $Rich_Web_VSlider_ID; ?>s.issue<?php echo $Rich_Web_VSlider_ID; ?>sDiv<?php echo $Rich_Web_VSlider_ID; ?>).animate({'marginTop':-heightIssue*currentIndex},{queue:false, duration:setting<?php echo $Rich_Web_VSlider_ID; ?>s.issue<?php echo $Rich_Web_VSlider_ID; ?>sSpeed<?php echo $Rich_Web_VSlider_ID; ?>});
 									}
+
+
+
 									jQuery(setting<?php echo $Rich_Web_VSlider_ID; ?>s.issue<?php echo $Rich_Web_VSlider_ID; ?>sDiv<?php echo $Rich_Web_VSlider_ID; ?>+' li').animate({'opacity':setting<?php echo $Rich_Web_VSlider_ID; ?>s.issue<?php echo $Rich_Web_VSlider_ID; ?>sTransparency<?php echo $Rich_Web_VSlider_ID; ?>},{queue:false, duration:setting<?php echo $Rich_Web_VSlider_ID; ?>s.issue<?php echo $Rich_Web_VSlider_ID; ?>sSpeed<?php echo $Rich_Web_VSlider_ID; ?>}).removeClass(setting<?php echo $Rich_Web_VSlider_ID; ?>s.issue<?php echo $Rich_Web_VSlider_ID; ?>sSelectedClass<?php echo $Rich_Web_VSlider_ID; ?>).eq(currentIndex).addClass(setting<?php echo $Rich_Web_VSlider_ID; ?>s.issue<?php echo $Rich_Web_VSlider_ID; ?>sSelectedClass<?php echo $Rich_Web_VSlider_ID; ?>).fadeTo(setting<?php echo $Rich_Web_VSlider_ID; ?>s.issue<?php echo $Rich_Web_VSlider_ID; ?>sTransparencySpeed<?php echo $Rich_Web_VSlider_ID; ?>,1);
 									if(howManydate<?php echo $Rich_Web_VSlider_ID; ?>s == 1)
 									{
@@ -15305,7 +15590,24 @@
 								}
 							}
 						});
+					
+						var arr<?php echo $Rich_Web_VSlider_ID; ?> = jQuery(".rw_resp_li<?php echo $Rich_Web_VSlider_ID; ?>");
+						for(var i=0;i<arr<?php echo $Rich_Web_VSlider_ID; ?>.length;i++){
+							arr<?php echo $Rich_Web_VSlider_ID; ?>[i].setAttribute("class", "rw_resp_li<?php echo $Rich_Web_VSlider_ID; ?>");
+							console.log(arr<?php echo $Rich_Web_VSlider_ID; ?>[i])
+						}
+					if(arr<?php echo $Rich_Web_VSlider_ID; ?>[0]){
+						arr<?php echo $Rich_Web_VSlider_ID; ?>[0].setAttribute("class", "rw_resp_li<?php echo $Rich_Web_VSlider_ID; ?> select<?php echo $Rich_Web_VSlider_ID; ?>ed")
 					};
+
+					var arr2<?php echo $Rich_Web_VSlider_ID; ?> = jQuery(".rw_tim_li<?php echo $Rich_Web_VSlider_ID; ?>");
+					for(var i=0;i<arr2<?php echo $Rich_Web_VSlider_ID; ?>.length;i++){
+						arr2<?php echo $Rich_Web_VSlider_ID; ?>[i].setAttribute("class", "rw_tim_li<?php echo $Rich_Web_VSlider_ID; ?>");
+					}
+					if(arr2<?php echo $Rich_Web_VSlider_ID; ?>[0]){
+						arr2<?php echo $Rich_Web_VSlider_ID; ?>[0].setAttribute("class", "rw_tim_li<?php echo $Rich_Web_VSlider_ID; ?> select<?php echo $Rich_Web_VSlider_ID; ?>ed")
+					};
+				}
 					function autoPlay<?php echo $Rich_Web_VSlider_ID; ?>()
 					{
 						if(y==true){ return }
@@ -15342,6 +15644,7 @@
 						var Rich_Web_MS_SShChT<?php echo $Rich_Web_VSlider_ID; ?> = jQuery(".Rich_Web_MS_SShChT<?php echo $Rich_Web_VSlider_ID; ?>").val();
 						if(Rich_Web_MS_SSh<?php echo $Rich_Web_VSlider_ID; ?> == "on") { Rich_Web_MS_SSh<?php echo $Rich_Web_VSlider_ID; ?>="true"; }
 						else { Rich_Web_MS_SSh<?php echo $Rich_Web_VSlider_ID; ?>="false"; }
+
 						setTimeout(function(){
 							jQuery().timelinr<?php echo $Rich_Web_VSlider_ID; ?>({
 								orientation<?php echo $Rich_Web_VSlider_ID; ?>: '<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Type; ?>',
@@ -15362,7 +15665,7 @@
 							autoPlay<?php echo $Rich_Web_VSlider_ID; ?>: Rich_Web_MS_SSh<?php echo $Rich_Web_VSlider_ID; ?>,
 							autoPlayPause<?php echo $Rich_Web_VSlider_ID; ?>:Rich_Web_MS_SShChT<?php echo $Rich_Web_VSlider_ID; ?>,
 						})
-						jQuery(window).resize(function(){
+						jQuery(window).on("load resize",function(){
 							jQuery().timelinr<?php echo $Rich_Web_VSlider_ID; ?>({
 								orientation<?php echo $Rich_Web_VSlider_ID; ?>: '<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Type; ?>',
 								issue<?php echo $Rich_Web_VSlider_ID; ?>sSpeed<?php echo $Rich_Web_VSlider_ID; ?>: 300,
@@ -15373,6 +15676,7 @@
 								autoPlayPause<?php echo $Rich_Web_VSlider_ID; ?>:Rich_Web_MS_SShChT<?php echo $Rich_Web_VSlider_ID; ?>,
 							})
 						})
+
 					});
 				</script>
 				<script type="text/javascript">
@@ -15387,15 +15691,52 @@
 						}
 					})
 					var y_timelineSl<?php echo $Rich_Web_VSlider_ID; ?>=0;
-					for(i=0;i<array_timelineSl<?php echo $Rich_Web_VSlider_ID; ?>.length;i++){
-						jQuery("<img class='RW_tim_vid_vid<?php echo $Rich_Web_VSlider_ID; ?>' />").attr('src', array_timelineSl<?php echo $Rich_Web_VSlider_ID; ?>[i]).on("load",function(){
-							y_timelineSl<?php echo $Rich_Web_VSlider_ID; ?>++;
-							if(y_timelineSl<?php echo $Rich_Web_VSlider_ID; ?> == array_timelineSl<?php echo $Rich_Web_VSlider_ID; ?>.length){
-								jQuery("#timeline_r<?php echo $Rich_Web_VSlider_ID; ?>w").fadeIn(1000);
-								jQuery("#RW_Load_Timeline_Navigation<?php echo $Rich_Web_VSlider_ID; ?>").remove();
-							}
-						})
-					}
+					// jQuery(window).on("load resize",function(){
+						for(i=0;i<array_timelineSl<?php echo $Rich_Web_VSlider_ID; ?>.length;i++){
+							jQuery("<img class='RW_tim_vid_vid<?php echo $Rich_Web_VSlider_ID; ?>' />").attr('src', array_timelineSl<?php echo $Rich_Web_VSlider_ID; ?>[i]).on("load",function(){
+								y_timelineSl<?php echo $Rich_Web_VSlider_ID; ?>++;
+								if(y_timelineSl<?php echo $Rich_Web_VSlider_ID; ?> == array_timelineSl<?php echo $Rich_Web_VSlider_ID; ?>.length){
+									// jQuery("#timeline_r<?php echo $Rich_Web_VSlider_ID; ?>w").show();
+									// jQuery("#RW_Load_Timeline_Navigation<?php echo $Rich_Web_VSlider_ID; ?>").remove();
+								}
+							})
+						}
+					// })
+					
+				<?php if ($Rich_Web_VSlider_Eff[0]->Rich_Web_MS_Type=='horizontal') { ?>
+					jQuery("#timeline_r<?php echo $Rich_Web_VSlider_ID; ?>w").show();
+					jQuery("#timeline_r<?php echo $Rich_Web_VSlider_ID; ?>w").css("height","0");
+					jQuery(window).on("load resize",function(){
+						jQuery("#RW_Load_Timeline_Navigation<?php echo $Rich_Web_VSlider_ID; ?>").remove();
+						if(jQuery("#timeline_r<?php echo $Rich_Web_VSlider_ID; ?>w").width() <= 500){
+							jQuery("#timeline_r<?php echo $Rich_Web_VSlider_ID; ?>w").css("height","auto");
+						}
+						else
+						{
+							jQuery("#timeline_r<?php echo $Rich_Web_VSlider_ID; ?>w").css("height",Math.floor(jQuery("#timeline_r<?php echo $Rich_Web_VSlider_ID; ?>w").width()*9/16+55+jQuery(".rw_tim_icons_cont_div<?php echo $Rich_Web_VSlider_ID; ?>").height()));
+						}
+						// jQuery("#timeline_r<?php echo $Rich_Web_VSlider_ID; ?>w").show();
+						
+					})
+				<?php } else{ ?>
+					jQuery(window).on("load resize",function(){
+						jQuery("#timeline_r<?php echo $Rich_Web_VSlider_ID; ?>w").show();
+						jQuery("#RW_Load_Timeline_Navigation<?php echo $Rich_Web_VSlider_ID; ?>").remove();
+						jQuery("#timeline_r<?php echo $Rich_Web_VSlider_ID; ?>w").css("height",jQuery(".rw_vid_tim<?php echo $Rich_Web_VSlider_ID; ?>").height()+300);
+						// jQuery("#timeline_r<?php echo $Rich_Web_VSlider_ID; ?>w").show();
+						
+					})
+				<?php } ?>
+					
+				</script>
+				<script type="text/javascript">
+					jQuery(window).on("load resize",function(){
+						var Rich_Web_MS_PlIc_S<?php echo $Rich_Web_VSlider_ID; ?> = "<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_MS_PlIc_S; ?>";
+						console.log(Math.floor(Rich_Web_MS_PlIc_S<?php echo $Rich_Web_VSlider_ID; ?>*jQuery(".RW_tim_vid_vid").width()/500));
+						jQuery("#issue<?php echo $Rich_Web_VSlider_ID; ?>s").css("margin","0px");
+						jQuery(".RW_tim_vid_play<?php echo $Rich_Web_VSlider_ID; ?>").css("font-size",Math.floor(Rich_Web_MS_PlIc_S<?php echo $Rich_Web_VSlider_ID; ?>*jQuery(".RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?>").innerWidth()/500)+"px");
+						jQuery(".RW_tim_vid_play<?php echo $Rich_Web_VSlider_ID; ?>").css("padding",Math.floor(Rich_Web_MS_PlIc_S<?php echo $Rich_Web_VSlider_ID; ?>/4)+"px "+Math.floor(Rich_Web_MS_PlIc_S<?php echo $Rich_Web_VSlider_ID; ?>/2*jQuery(".RW_IMGD<?php echo $Rich_Web_VSlider_ID; ?>").innerWidth()/300)+"px");
+					})
 				</script>
 			<?php } else if($Rich_Web_VSlider_Eff_Dat[0]->slider_Vid_type=='Amazing Simple Slider'){ ?>
 			<?php
@@ -15405,6 +15746,22 @@
 				$anim_sum=0.75;
 			?>
 			<style type="text/css">
+				.countVideoes<?php echo $Rich_Web_VSlider_ID; ?>{
+					position:absolute;
+					top:5px;
+					right:15px;
+					z-index: 2;
+					font-family: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_TO_NS1_Num_FFamily;?>;
+					font-size: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_TO_NS1_Num_FSize;?>px;
+					color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_TO_NS1_Num_Col;?>;
+				}
+
+				<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_TO_NS1_Num_Show == ""){ ?>
+					.countVideoes<?php echo $Rich_Web_VSlider_ID; ?>{
+						display: none !important;
+					}
+				<?php } ?>
+
 				.center_content<?php echo $Rich_Web_VSlider_ID; ?>
 				{
 					position:absolute;
@@ -15423,7 +15780,7 @@
 					position:relative;
 					margin:20px auto !important;
 					background-color:<?php echo $Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_ASSl_L_BgC; ?> !important;
-					z-index:999;
+					z-index:2;
 					width:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Width;?>px;
 					height:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Height;?>px;
 					max-height:<?php echo ($Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Height)/($Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Width)*100;?>%;
@@ -15732,6 +16089,7 @@
 					-webkit-animation-delay: 0.3s;
 					-moz-animation-delay: 0.3s;
 				}
+
 				.windows8<?php echo $Rich_Web_VSlider_ID; ?> #wBall_3
 				{
 					animation-delay: 0.61s;
@@ -16188,7 +16546,7 @@
 				}
 				.RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?>
 				{
-					max-width: 100%;
+					max-width: 100% !important;
 					width:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Width;?>px;
 					height:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Height;?>px;
 					position: relative;
@@ -16355,10 +16713,20 @@
 				#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?> li
 				{
 					float:left;
+					display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+				    display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+				    display: -ms-flexbox;      /* TWEENER - IE 10 */
+				    display: -webkit-flex;     /* NEW - Chrome */
+				    display: flex;
+				    flex-direction: row;
+				    flex-wrap: wrap;
+				    justify-content: center;
+				    align-items: center;
+				    -webkit-align-items: center; /* Safari 7.0+ */
 					list-style-type: none;
 					position:relative;
 					width:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Width;?>px;
-					height:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Height;?>px;
+					height:100%;
 					z-index: 1;
 					margin: 0 !important;
 					padding: 0 !important;
@@ -16446,13 +16814,20 @@
 					-ms-transform: translate(-100%, -50%);
 					border-radius:0px 7px 7px 0;
 				}
-				#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>.active #RW_SV_Next_<?php echo $Rich_Web_VSlider_ID;?>, #RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>.active #RW_SV_Previous_<?php echo $Rich_Web_VSlider_ID;?>
-				{
+				#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>:hover #RW_SV_Next_<?php echo $Rich_Web_VSlider_ID; ?>, #RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>:hover #RW_SV_Previous_<?php echo $Rich_Web_VSlider_ID; ?> {
 					transform: translate(0%, -50%);
 					-webkit-transform: translate(0%, -50%);
 					-moz-transform: translate(0%, -50%);
 					-o-transform: translate(0%, -50%);
 					-ms-transform: translate(0%, -50%);
+				}
+				#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>.active #RW_SV_Next_<?php echo $Rich_Web_VSlider_ID;?>, #RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>.active #RW_SV_Previous_<?php echo $Rich_Web_VSlider_ID;?>
+				{
+					/*transform: translate(0%, -50%);
+					-webkit-transform: translate(0%, -50%);
+					-moz-transform: translate(0%, -50%);
+					-o-transform: translate(0%, -50%);
+					-ms-transform: translate(0%, -50%);*/
 				}
 				#RW_Counter_<?php echo $Rich_Web_VSlider_ID; ?>
 				{
@@ -16461,37 +16836,52 @@
 					z-index: 1;
 					width:auto;
 					position:absolute;
-					font-family: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_TO_NS1_Num_FFamily;?>;
-					font-size: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_TO_NS1_Num_FSize;?>px;
-					color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_TO_NS1_Num_Col;?>;
+					
 				}
 				.RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> { bottom: 10%; height:15px; position:relative; text-align:center; z-index: 1; display: block; }
 				.RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul { width:100%; position: absolute; margin: 0; padding: 0; height: 100%; }
 				.RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li
 				{
-					margin: 0 <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_PB;?>px !important;
+					position:relative;
+					margin:0 !important;
+					padding: 0 <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_PB;?>px !important;
 					display: inline-block;
-					width: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Width;?>px;
-					height: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Height;?>px;
-					border-radius:50%;
-					background:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Col;?>;
 					position:relative;
 					top:0;
-					padding: 0 !important;
+					box-sizing:border-box !important;
+				}
+				.RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li a{
+					display:inline-block;
+					width: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Width;?>px;
+					height: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Height;?>px;
+					background:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Col;?>;
+					border-radius:50%;
+					opacity:0.8;
+				}
+
+				<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_IO_NS1_Show == '') { ?>
+					.RW_SV_Btns_<?php echo $Rich_Web_VSlider_ID; ?>{
+						display: none !important;
+					}
+				<?php } ?>
+
+				.RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li.active a{
+					width: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Width+4;?>px;
+					height: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Height+4;?>px;
 				}
 				.RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li:before { content: none; }
 				#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?> li:before { content: none; }
-				.RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li.active
+				.RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li.active a
 				{
-					width: calc(<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Width;?>px + 4px) !important;
-					height: calc(<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Height;?>px + 4px) !important;
-					top:2px;
+					position: relative;
 					opacity:1;
+					top:2px;
 					box-shadow:rgba(0,0,0,0.1) 1px 1px 0px;
 					-webkit-box-shadow:rgba(0,0,0,0.1) 1px 1px 0px;
 					-moz-box-shadow:rgba(0,0,0,0.1) 1px 1px 0px;
 					background:<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Cur_Col;?>;
 				}
+				
 				#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul, .RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li
 				{
 					-webkit-transition: all 0.3s cubic-bezier(1,.01,.32,1);
@@ -16504,13 +16894,10 @@
 				{
 					position: relative;
 					display: inline-block;
-					left: 50%;
+					outline: none !important;
 					z-index: -1;
-					top:50%;
-					transform: translateX(-50%);
-					-webkit-transform: translateX(-50%);
-					-moz-transform: translateX(-50%);
-					margin-top: -25px;
+					
+					
 					padding: 6px 22px;
 					line-height: 1;
 					background: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PIO_NS1_BgCol;?>;
@@ -16520,13 +16907,31 @@
 					font-size: 30px;
 					z-index: 99999;
 				}
+				<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Show != "on"){ ?>
+				.RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>{
+					display: none !important;
+				}
+			<?php } ?>
+
 				#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?> li a.rvs-nv-play-video:before { content: "\25ba"; }
 				#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?> li a.rvs-nv-play-video:hover
 				{
 					background: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PIO_NS1_HovBgCol;?>;
 					color: <?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PIO_NS1_HovCol;?>;
 				}
-				@media screen and (max-width:450px){ .RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> { display: none; } }
+				
+				@media screen and (max-width:450px){ 
+					.RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> { 
+						display: none !important; 
+					} 
+					.RW_SV_Slider_Title_Div_<?php echo $Rich_Web_VSlider_ID; ?>>div{
+						display: none !important;
+					}
+					#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?> li a.rvs-nv-play-video{
+						font-size: 15px;
+						padding: 3px 11px;
+					}
+				}
 			</style>
 			<div id="RW_Load_ASS_Navigation<?php echo $Rich_Web_VSlider_ID; ?>" style="<?php if($Rich_Web_VSlider_Eff_Loader[0]->Rich_Web_ASSl_Loading_Show == "on") { ?>display: block;<?php } else { ?>display: none;<?php } ?>">
 				<div class="center_content<?php echo $Rich_Web_VSlider_ID; ?>">
@@ -16618,6 +17023,9 @@
 			<?php } ?>
 			<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_IO_NS1_Show == 'on') {$RW_SV_SL_ACTIVE = 'active';} ?>
 				<div class="RW_CONTENT_LEFT_RIGHT_<?php echo $Rich_Web_VSlider_ID; ?>" style="height:0;opacity:0;">
+					<span class="countVideoes<?php echo $Rich_Web_VSlider_ID; ?>">
+						1 / 6
+					</span>
 					<div class="RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?>">
 						<div id="RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>" class="<?=$RW_SV_SL_ACTIVE?>">
 							<ul id="RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?>">
@@ -16639,11 +17047,14 @@
 											<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_TO_NS1_Show == 'on') { ?>
 												<h3><?php echo html_entity_decode($Rich_Web_VSlider_Videos[$i]->Rich_Web_VSlider_Vid_Title);?></h3>
 											<?php } ?>
+											
 											<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_DO_NS1_Show == 'on') { ?>
+												<div>
 												<?php echo html_entity_decode($Rich_Web_VSlider_Videos[$i]->Rich_Web_VSlider_Add_Desc);?>
+												</div>
 											<?php } ?>
 										</div>
-										<iframe style="display: none;" width="100%" height="100%" src="<?php echo $Rich_Web_VSlider_Videos[$i]->Rich_Web_VSldier_Add_Src;?>?showinfo=1" frameborder="0" allowfullscreen></iframe>
+										<iframe style="display: none;" width="100%" height="100%" src="" frameborder="0" allowfullscreen></iframe>
 										<a href="<?php echo $Rich_Web_VSlider_Videos[$i]->Rich_Web_VSldier_Add_Src;?>" class="rvs-nv-play-video" class="rvs-play-video rvs-play-video<?php echo $Rich_Web_VSlider_ID; ?>"></a>
 									</li>
 								<?php } ?>
@@ -16662,11 +17073,12 @@
 									<img width="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_IO_NS1_Width;?>" height="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_IO_NS1_Height;?>" src="<?php echo plugins_url("Images/icons/icon-".$Rich_Web_VSlider_Eff[0]->Rich_Web_IO_NS1_Image_Type.".png",__FILE__);?>">
 								<?php } ?>
 							</div>
-							<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_TO_NS1_Num_Show == 'on') { ?> <div id="RW_Counter_<?php echo $Rich_Web_VSlider_ID; ?>"></div> <?php } ?>
-							<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Show == 'on') { ?> <div class="RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>"><ul></ul></div><?php } ?>
+							<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_TO_NS1_Num_Show == 'on') { ?> <div id="
+							<?php echo $Rich_Web_VSlider_ID; ?>"></div> <?php } ?>
+							<div class="RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>"><ul></ul></div>
 						</div>
-						<input type="text" style="display: none;" class="RW_SV_Inp_Width"       value="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Width;?>">
-						<input type="text" style="display: none;" class="RW_SV_Inp_Height"      value="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Height;?>">
+						<input type="text" style="display: none;" class="RW_SV_Inp_Width<?php echo $Rich_Web_VSlider_ID; ?>"       value="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Width;?>">
+						<input type="text" style="display: none;" class="RW_SV_Inp_Height<?php echo $Rich_Web_VSlider_ID; ?>"      value="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Height;?>">
 						<input type="text" style="display: none;" class="RW_SV_Inp_FSize"       value="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_IO_NS1_FSize;?>">
 						<input type="text" style="display: none;" class="RW_SV_Inp_Img_Width"   value="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_IO_NS1_Width;?>">
 						<input type="text" style="display: none;" class="RW_SV_Inp_Img_Height"  value="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_IO_NS1_Height;?>">
@@ -16674,145 +17086,191 @@
 						<input type="text" style="display: none;" class="RW_SV_Inp_Num_FSize"   value="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_TO_NS1_Num_FSize;?>">
 						<input type="text" style="display: none;" class="RW_SV_Inp_Nav_Width"   value="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Width;?>">
 						<input type="text" style="display: none;" class="RW_SV_Inp_Nav_Height"  value="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_PO_NS1_Height;?>">
+						<input type="text" style="display: none;" class="rw_autoplay<?php echo $Rich_Web_VSlider_ID; ?>" value="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_PTime;?>">
+						<input type="text" style="display:none;" class="rw_autoplay_OnOf<?php echo $Rich_Web_VSlider_ID; ?>" value="<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Autoplay;?>">
 					</div>
 				</div>
 				<script type="text/javascript">
-					jQuery(document).ready(function(){
-						function resp<?php echo $Rich_Web_VSlider_ID; ?>() {
-							sliderWidth_<?php echo $Rich_Web_VSlider_ID; ?> = jQuery('#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>').width();
-							Cont_func_Width = parseInt(jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?> input.RW_SV_Inp_Width").val());
-							Cont_func_Height = parseInt(jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?> input.RW_SV_Inp_Height").val());
-							Cont_func_FSize = parseInt(jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?> input.RW_SV_Inp_FSize").val());
-							Cont_func_Resp_Width = jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?>").width();
-							Cont_func_Img_Width = parseInt(jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?> input.RW_SV_Inp_Img_Width").val());
-							Cont_func_Img_Height = parseInt(jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?> input.RW_SV_Inp_Img_Height").val());
-							Func_Title_FSize = parseInt(jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?> input.RW_SV_Inp_Title_FSize").val());
-							Func_Num_FSize = parseInt(jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?> input.RW_SV_Inp_Num_FSize").val());
-							Func_Nav_Width = parseInt(jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?> input.RW_SV_Inp_Nav_Width").val());
-							Func_Nav_Height = parseInt(jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?> input.RW_SV_Inp_Nav_Height").val());
-							jQuery("#RW_Load_ASS_Navigation<?php echo $Rich_Web_VSlider_ID; ?>").css("max-height",Math.floor(Cont_func_Height/Cont_func_Width*jQuery("#RW_Load_ASS_Navigation<?php echo $Rich_Web_VSlider_ID; ?>").width()));
-							jQuery("#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?> li > div h3").css({'font-size' : Math.floor(Func_Title_FSize*Cont_func_Resp_Width/(Cont_func_Width))+'px', 'line-height' : Math.floor(Func_Title_FSize*Cont_func_Resp_Width/(Cont_func_Width))+'px'});
-							jQuery("#RW_Counter_<?php echo $Rich_Web_VSlider_ID; ?>").css({'font-size' : Math.floor(Func_Num_FSize*Cont_func_Resp_Width/(Cont_func_Width))+'px '});
-							jQuery(".RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li").css({'width' : Math.floor(Func_Nav_Width*Cont_func_Resp_Width/(Cont_func_Width))+'px ', 'height' : Math.floor(Func_Nav_Height*Cont_func_Resp_Width/(Cont_func_Width))+'px '});
-							jQuery("#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?> li a.rvs-nv-play-video").css({'padding' : Math.floor(6*Cont_func_Resp_Width/(Cont_func_Width))+'px ' + Math.floor(22*Cont_func_Resp_Width/(Cont_func_Width))+'px '});
-							jQuery("#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?> li a.rvs-nv-play-video").css({'font-size' : Math.floor(30*Cont_func_Resp_Width/(Cont_func_Width))+'px '});
-							func_Img_Width = jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?> input.RW_SV_Inp_Img_Width").val();
-							func_Img_Height = jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?> input.RW_SV_Inp_Img_Height").val();
-							resp_func_calc = Cont_func_Resp_Width * Cont_func_Height / Cont_func_Width;
-							<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_IO_NS1_Arrow_Type == 'icon') { ?>
-								jQuery(".RW_SV_Btns_<?php echo $Rich_Web_VSlider_ID; ?>").css({'padding' : Math.floor(10*Cont_func_Resp_Width/(Cont_func_Width))+'px '});
-								jQuery(".RW_SV_Btns_<?php echo $Rich_Web_VSlider_ID; ?> i").css({'font-size' : Math.floor(Cont_func_FSize*Cont_func_Resp_Width/(Cont_func_Width))+'px'});
-							<?php } else if($Rich_Web_VSlider_Eff[0]->Rich_Web_IO_NS1_Arrow_Type == 'image') { ?>
-								jQuery(".RW_SV_Btns_<?php echo $Rich_Web_VSlider_ID; ?> img").attr('width', Math.floor(Cont_func_Img_Width*Cont_func_Resp_Width/(Cont_func_Width)));
-								jQuery(".RW_SV_Btns_<?php echo $Rich_Web_VSlider_ID; ?> img").attr('height', Math.floor(Cont_func_Img_Height*Cont_func_Resp_Width/(Cont_func_Width)));
-								jQuery(".RW_SV_Btns_<?php echo $Rich_Web_VSlider_ID; ?>").css({'width' : Math.floor(Cont_func_Img_Width*Cont_func_Resp_Width/(Cont_func_Width))+'px', 'height' : Math.floor(Cont_func_Img_Height*Cont_func_Resp_Width/(Cont_func_Width))+'px'});
-							<?php } ?>
-							jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?>").css({'width' : Cont_func_Width+'px'});
-							jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?>").css({'height' : resp_func_calc+'px'});
-							jQuery("#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?> li").css({'width' : Cont_func_Resp_Width+'px'});
-							jQuery("#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?> li").css({'height' : resp_func_calc+'px'});
+					var count_y = 0;
+					var clInt = false;
+					var click = false;
+
+					var rw_autoplay_OnOf<?php echo $Rich_Web_VSlider_ID; ?> = jQuery(".rw_autoplay_OnOf<?php echo $Rich_Web_VSlider_ID; ?>").val();
+					var rw_autoplay<?php echo $Rich_Web_VSlider_ID; ?> = jQuery(".rw_autoplay<?php echo $Rich_Web_VSlider_ID; ?>").val();
+					var count<?php echo $Rich_Web_VSlider_ID; ?> = 0;
+					var arr_li<?php echo $Rich_Web_VSlider_ID; ?> = document.querySelectorAll("#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?> li");
+					var length<?php echo $Rich_Web_VSlider_ID; ?> = arr_li<?php echo $Rich_Web_VSlider_ID; ?>.length;
+					var html = "";
+					for(var i=0;i<length<?php echo $Rich_Web_VSlider_ID; ?>;i++){
+						html += "<li class='nav<?php echo $Rich_Web_VSlider_ID; ?>'><a href='#' data-id='"+i+"'></a></li>";
+					}
+
+					document.querySelector(".RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul").innerHTML = html;
+
+					function navigation<?php echo $Rich_Web_VSlider_ID; ?>(){
+						var navList<?php echo $Rich_Web_VSlider_ID; ?> = document.querySelectorAll(".RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li");
+						for(var i=0;i<navList<?php echo $Rich_Web_VSlider_ID; ?>.length;i++){
+							navList<?php echo $Rich_Web_VSlider_ID; ?>[i].classList.remove("active");
 						}
-						resp<?php echo $Rich_Web_VSlider_ID; ?>();
-						jQuery(window).resize(function(){
-							sliderWidth_<?php echo $Rich_Web_VSlider_ID; ?> = jQuery('#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>').width();
+						navList<?php echo $Rich_Web_VSlider_ID; ?>[count<?php echo $Rich_Web_VSlider_ID; ?>].classList.add("active");	
+					}
+					
+					var left<?php echo $Rich_Web_VSlider_ID; ?> = 0;
+
+					function changeVideo<?php echo $Rich_Web_VSlider_ID; ?>(){
+						left<?php echo $Rich_Web_VSlider_ID; ?> = -count<?php echo $Rich_Web_VSlider_ID; ?>*amaz_content_width<?php echo $Rich_Web_VSlider_ID; ?>;
+						document.querySelector("#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?>").style.left = left<?php echo $Rich_Web_VSlider_ID; ?>+"px";
+						navigation<?php echo $Rich_Web_VSlider_ID; ?>();
+						document.querySelector(".countVideoes<?php echo $Rich_Web_VSlider_ID; ?>").innerHTML = (parseInt(count<?php echo $Rich_Web_VSlider_ID; ?>)+1) + " / " + length<?php echo $Rich_Web_VSlider_ID; ?>
+					}
+
+					var amaz_content_width<?php echo $Rich_Web_VSlider_ID; ?> = 0;
+					function acw<?php echo $Rich_Web_VSlider_ID; ?>(){
+						amaz_content_width<?php echo $Rich_Web_VSlider_ID; ?> = parseInt(jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?>").width());
+					}
+
+					function resp<?php echo $Rich_Web_VSlider_ID; ?>(){
+						var RW_SV_Inp_Width<?php echo $Rich_Web_VSlider_ID; ?> = parseInt(jQuery(".RW_SV_Inp_Width<?php echo $Rich_Web_VSlider_ID; ?>").val());
+						var RW_SV_Inp_Height<?php echo $Rich_Web_VSlider_ID; ?> = parseInt(jQuery(".RW_SV_Inp_Height<?php echo $Rich_Web_VSlider_ID; ?>").val());
+						jQuery("#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?> li").css("width",jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?>").width());
+						jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?>").css("height",RW_SV_Inp_Height<?php echo $Rich_Web_VSlider_ID; ?>/RW_SV_Inp_Width<?php echo $Rich_Web_VSlider_ID; ?>*jQuery(".RW_SV_NSV_<?php echo $Rich_Web_VSlider_ID; ?>").width());
+						acw<?php echo $Rich_Web_VSlider_ID; ?>();
+						jQuery("#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?>").css("width",length<?php echo $Rich_Web_VSlider_ID; ?>*amaz_content_width<?php echo $Rich_Web_VSlider_ID; ?>+"px");
+						navigation<?php echo $Rich_Web_VSlider_ID; ?>();
+						changeVideo<?php echo $Rich_Web_VSlider_ID; ?>();
+					}
+
+					jQuery(window).on("resize",function(){
+						if(count_y>0){
 							resp<?php echo $Rich_Web_VSlider_ID; ?>();
-							slideLeft_<?php echo $Rich_Web_VSlider_ID; ?>();
-							slideRight_<?php echo $Rich_Web_VSlider_ID; ?>();
-						});
-						var pos_<?php echo $Rich_Web_VSlider_ID; ?> = 0;
-						var totalSlides_<?php echo $Rich_Web_VSlider_ID; ?> = jQuery('#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li').length;
-						jQuery('.rvs-nv-play-video').click(function() {
-							event.preventDefault();
-							jQuery(this).hide();
-							jQuery(".RW_SV_Slider_Title_Div_<?php echo $Rich_Web_VSlider_ID; ?>").hide();
-							jQuery(".RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>").hide();
-							jQuery("#RW_Counter_<?php echo $Rich_Web_VSlider_ID; ?>").hide();
-							jQuery(this).parent().css({'background-image' : 'none'});
-							var href = jQuery(this).attr('href');
-							jQuery(this).prev().css({'display' : 'block'}).attr("src",href+'?showinfo=1&autoplay=1&rel=0&amp');
-						});
-						jQuery('.RW_SV_Btns_<?php echo $Rich_Web_VSlider_ID; ?>').click(function() {
-							jQuery("#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li").each(function() {
-								var test = jQuery(this).find(".RW_SV_Slider_Link").text();
-								jQuery(this).find("iframe").attr("src","").css({'display' : 'none'});
-								jQuery(this).css({'background-image' : 'url(' + test + ')'});
-							});
-							jQuery(".rvs-nv-play-video").show();
-							jQuery("#RW_Counter_<?php echo $Rich_Web_VSlider_ID; ?>").show();
-							jQuery(".RW_SV_Slider_Title_Div_<?php echo $Rich_Web_VSlider_ID; ?>").show();
-							jQuery(".RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>").show();
-						});
-						jQuery('#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?>').width(sliderWidth_<?php echo $Rich_Web_VSlider_ID; ?>*totalSlides_<?php echo $Rich_Web_VSlider_ID; ?>);
-						jQuery('#RW_SV_Next_<?php echo $Rich_Web_VSlider_ID; ?>').click(function(){ slideRight_<?php echo $Rich_Web_VSlider_ID; ?>(); });
-						jQuery('#RW_SV_Previous_<?php echo $Rich_Web_VSlider_ID; ?>').click(function(){ slideLeft_<?php echo $Rich_Web_VSlider_ID; ?>(); });
-						<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Autoplay == 'on') { ?>
-							var autoSlider_<?php echo $Rich_Web_VSlider_ID; ?> = setInterval(slideRight_<?php echo $Rich_Web_VSlider_ID; ?>, <?=$Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_PTime?>000);
-						<?php } ?>
-						jQuery.each(jQuery('#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li'), function() {
-							var c = jQuery(this).attr("data-color");
-							jQuery(this).css("background",c);
-							var li = document.createElement('li');
-							jQuery('.RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul').append(li);
-						});
-						countSlides_<?php echo $Rich_Web_VSlider_ID; ?>();
-						pagination_<?php echo $Rich_Web_VSlider_ID; ?>();
-						jQuery('#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>').hover(
-							function() {
-								<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_IO_NS1_Show != 'on') { ?>
-									jQuery(this).addClass('active');
-								<?php } ?>
-								<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Autoplay == 'on') { ?>
-									clearInterval(autoSlider_<?php echo $Rich_Web_VSlider_ID; ?>);
-								<?php } ?>
-							},
-							function() {
-								<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_IO_NS1_Show != 'on') { ?>
-									jQuery(this).removeClass('active');
-								<?php } ?>
-								<?php if($Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Autoplay == 'on') { ?>
-									autoSlider_<?php echo $Rich_Web_VSlider_ID; ?> = setInterval(slideRight_<?php echo $Rich_Web_VSlider_ID; ?>, <?=$Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_PTime?>000);
-								<?php } ?>
-							}
-						);
-						function slideLeft_<?php echo $Rich_Web_VSlider_ID; ?>()
-						{
-							pos_<?php echo $Rich_Web_VSlider_ID; ?>--;
-							if(pos_<?php echo $Rich_Web_VSlider_ID; ?>==-1){ pos_<?php echo $Rich_Web_VSlider_ID; ?> = totalSlides_<?php echo $Rich_Web_VSlider_ID; ?>-1; }
-							jQuery('#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?>').css('left', -(sliderWidth_<?php echo $Rich_Web_VSlider_ID; ?>*pos_<?php echo $Rich_Web_VSlider_ID; ?>));
-							countSlides_<?php echo $Rich_Web_VSlider_ID; ?>();
-							pagination_<?php echo $Rich_Web_VSlider_ID; ?>();
 						}
-						function slideRight_<?php echo $Rich_Web_VSlider_ID; ?>()
-						{
-							pos_<?php echo $Rich_Web_VSlider_ID; ?>++;
-							if(pos_<?php echo $Rich_Web_VSlider_ID; ?>==totalSlides_<?php echo $Rich_Web_VSlider_ID; ?>){ pos_<?php echo $Rich_Web_VSlider_ID; ?> = 0; }
-							jQuery('#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul#RW_SV_Slider_<?php echo $Rich_Web_VSlider_ID; ?>').css('left', -(sliderWidth_<?php echo $Rich_Web_VSlider_ID; ?>*pos_<?php echo $Rich_Web_VSlider_ID; ?>)); 
-							countSlides_<?php echo $Rich_Web_VSlider_ID; ?>();
-							pagination_<?php echo $Rich_Web_VSlider_ID; ?>();
-						}
-						function countSlides_<?php echo $Rich_Web_VSlider_ID; ?>()
-						{
-							jQuery('#RW_Counter_<?php echo $Rich_Web_VSlider_ID; ?>').html(pos_<?php echo $Rich_Web_VSlider_ID; ?>+1 + ' / ' + totalSlides_<?php echo $Rich_Web_VSlider_ID; ?>);
-						}
-						function pagination_<?php echo $Rich_Web_VSlider_ID; ?>()
-						{
-							jQuery('.RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li').removeClass('active');
-							jQuery('.RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li:eq('+pos_<?php echo $Rich_Web_VSlider_ID; ?>+')').addClass('active');
-						}
+					})
+
+					var intFunc = function(){
+						next<?php echo $Rich_Web_VSlider_ID; ?>();
+					}
+
+					var interval = window.setInterval(intFunc,1000*rw_autoplay<?php echo $Rich_Web_VSlider_ID; ?>)
+
+					if(rw_autoplay_OnOf<?php echo $Rich_Web_VSlider_ID; ?> == ""){
+						window.clearInterval(interval);
+					}
+
+					jQuery(".RW_CONTENT_LEFT_RIGHT_<?php echo $Rich_Web_VSlider_ID; ?>").mousemove(function(){
+						clInt = true;
 					});
+
+					jQuery(".RW_CONTENT_LEFT_RIGHT_<?php echo $Rich_Web_VSlider_ID; ?>").mouseout(function(){
+						if(!click){
+							clInt = false;
+						}
+					})
+					
+					function deleteVideo<?php echo $Rich_Web_VSlider_ID; ?>(){
+						jQuery("#RW_SV_Slider_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li").each(function() {
+							var test = jQuery(this).find(".RW_SV_Slider_Link").text();
+							jQuery(this).find("iframe").attr("src","").css({'display' : 'none'});
+							jQuery(this).css({'background-image' : 'url(' + test + ')'});
+						});
+						jQuery(".rvs-nv-play-video").show();
+						jQuery(".countVideoes<?php echo $Rich_Web_VSlider_ID; ?>").show();
+						jQuery(".RW_SV_Slider_Title_Div_<?php echo $Rich_Web_VSlider_ID; ?>").show();
+						jQuery(".RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>").show();
+					}
+
+
+
+					function next<?php echo $Rich_Web_VSlider_ID; ?>(){
+						if(clInt){
+							return;
+						}
+						clInt=true;
+						count<?php echo $Rich_Web_VSlider_ID; ?>++;
+						if(count<?php echo $Rich_Web_VSlider_ID; ?> == length<?php echo $Rich_Web_VSlider_ID; ?>){
+							
+							count<?php echo $Rich_Web_VSlider_ID; ?> = 0;
+						}	
+						changeVideo<?php echo $Rich_Web_VSlider_ID; ?>();
+						deleteVideo<?php echo $Rich_Web_VSlider_ID; ?>();
+						window.setTimeout(function(){
+							clInt=false;
+						},300)
+					}
+
+					function prev<?php echo $Rich_Web_VSlider_ID; ?>(){
+						if(clInt){
+							return;
+						}
+						clInt=true;
+						count<?php echo $Rich_Web_VSlider_ID; ?>--;
+						if(count<?php echo $Rich_Web_VSlider_ID; ?> < 0){
+							count<?php echo $Rich_Web_VSlider_ID; ?> = length<?php echo $Rich_Web_VSlider_ID; ?>-1;
+						}
+						changeVideo<?php echo $Rich_Web_VSlider_ID; ?>();
+						deleteVideo<?php echo $Rich_Web_VSlider_ID; ?>();
+						window.setTimeout(function(){
+							clInt=false;
+						},300)
+					}
+
+					jQuery(".RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?> ul li a").click(function(e){
+						e.preventDefault();
+						var data = event.target.dataset;
+						var id=data.id;
+						count<?php echo $Rich_Web_VSlider_ID; ?> = id;
+						left<?php echo $Rich_Web_VSlider_ID; ?> = -count<?php echo $Rich_Web_VSlider_ID; ?>*amaz_content_width<?php echo $Rich_Web_VSlider_ID; ?>;
+						changeVideo<?php echo $Rich_Web_VSlider_ID; ?>();
+					})
+
+					jQuery("#RW_SV_Next_<?php echo $Rich_Web_VSlider_ID; ?>").click(function(){
+						clInt=false;
+						click = false;
+						next<?php echo $Rich_Web_VSlider_ID; ?>();
+						window.setTimeout(function(){
+							clInt=true;
+						},300)
+					})
+
+					jQuery("#RW_SV_Previous_<?php echo $Rich_Web_VSlider_ID; ?>").click(function(){
+						clInt=false;
+						click = false;
+						prev<?php echo $Rich_Web_VSlider_ID; ?>();
+						window.setTimeout(function(){
+							clInt=true;
+						},300)
+					})
+
+					jQuery('.rvs-nv-play-video').click(function(e) {
+
+						e=e||window.event;
+						e.preventDefault();
+						clInt = true;
+						click = true;
+						jQuery(this).hide();
+						jQuery(".RW_SV_Slider_Title_Div_<?php echo $Rich_Web_VSlider_ID; ?>").hide();
+						jQuery(".RW_SV_Pagination_Wrap_<?php echo $Rich_Web_VSlider_ID; ?>").hide();
+						jQuery(".countVideoes<?php echo $Rich_Web_VSlider_ID; ?>").hide();
+						jQuery(this).parent().css({'background-image' : 'none'});
+						var href = jQuery(this).attr('href');
+						jQuery(this).prev().css({'display' : 'block'}).attr("src",href+'?showinfo=1&autoplay=1&rel=0&amp');
+					});
+
 					var array_ass<?php echo $Rich_Web_VSlider_ID; ?>=[];
 					jQuery(".rw_hidden_imgs<?php echo $Rich_Web_VSlider_ID; ?>").each(function(){
 						if( jQuery(this).attr("src") != "" ) {
 							array_ass<?php echo $Rich_Web_VSlider_ID; ?>.push(jQuery(this).attr("src"));
 						}
 					})
+
 					var y_ass<?php echo $Rich_Web_VSlider_ID; ?>=0;
 					for(i=0;i<array_ass<?php echo $Rich_Web_VSlider_ID; ?>.length;i++){
 						jQuery("<img class='rw_hidden_imgs<?php echo $Rich_Web_VSlider_ID; ?>' />").attr('src', array_ass<?php echo $Rich_Web_VSlider_ID; ?>[i]).on("load",function(){
 							y_ass<?php echo $Rich_Web_VSlider_ID; ?>++;
 							if(y_ass<?php echo $Rich_Web_VSlider_ID; ?> == array_ass<?php echo $Rich_Web_VSlider_ID; ?>.length){
-								jQuery(".RW_CONTENT_LEFT_RIGHT_<?php echo $Rich_Web_VSlider_ID; ?>").css({"height":"<?php echo $Rich_Web_VSlider_Eff[0]->Rich_Web_GO_NS1_Height;?>px","opacity":"1"});
+								jQuery(".RW_CONTENT_LEFT_RIGHT_<?php echo $Rich_Web_VSlider_ID; ?>").css({"height":"auto","opacity":"1"});
 								jQuery("#RW_Load_ASS_Navigation<?php echo $Rich_Web_VSlider_ID; ?>").remove();
+								resp<?php echo $Rich_Web_VSlider_ID; ?>();
+								count_y++;
 							}
 						})
 					}

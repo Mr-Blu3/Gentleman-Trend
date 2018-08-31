@@ -63,8 +63,7 @@ final class FLBuilderServiceConvertKit extends FLBuilderService {
 		// Make sure we have an API key.
 		if ( ! isset( $fields['api_key'] ) || empty( $fields['api_key'] ) ) {
 			$response['error'] = __( 'Error: You must provide an API key.', 'fl-builder' );
-		} // End if().
-		else {
+		} else {
 
 			$api = $this->get_api( $fields['api_key'] );
 
@@ -148,8 +147,10 @@ final class FLBuilderServiceConvertKit extends FLBuilderService {
 			'' => __( 'Choose...', 'fl-builder' ),
 		);
 
-		foreach ( $forms as $form ) {
-			$options[ $form['id'] ] = $form['name'];
+		if ( isset( $forms['forms'] ) ) {
+			foreach ( $forms['forms'] as $form ) {
+				$options[ $form['id'] ] = $form['name'];
+			}
 		}
 
 		FLBuilder::render_settings_field( 'list_id', array(
@@ -197,8 +198,13 @@ final class FLBuilderServiceConvertKit extends FLBuilderService {
 			}
 
 			$result = $api->form_subscribe( $settings->list_id, $data );
-			if ( 'created' != $result->status ) {
-				$response['error'] = __( 'There was an error subscribing to ConvertKit.', 'fl-builder' );
+
+			if ( isset( $result->error ) ) {
+				$message = isset( $result->message ) ? $result->message : '';
+				$response['error'] = sprintf(
+					__( 'There was an error subscribing to ConvertKit. Error: %s', 'fl-builder' ),
+					$message
+				);
 			}
 		}
 

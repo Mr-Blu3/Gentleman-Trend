@@ -1,11 +1,11 @@
 <?php
 	/*
 		Plugin name: Video Slider Rich
-		Plugin URI: http://rich-web.esy.es/slider-video/
+		Plugin URI: http://www.rich-web.org/wp=video-slider
 		Description: Slider plugin is fully responsive. Your videos with our slider effects will be perfectly.
-		Version: 1.2.1
+		Version: 1.2.2
 		Author: Rich-Web
-		Author URI: http://www.rich-web.esy.es/
+		Author URI: http://www.rich-web.org
 		License: GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
 	*/
 	add_action('widgets_init', 'Rich_Web_Video_Slider_Widget');

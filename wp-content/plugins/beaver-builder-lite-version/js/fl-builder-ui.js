@@ -10,6 +10,21 @@
       };
     }
 
+		/**
+		 * Polyfill for String.endsWidth()
+		 */
+		if (!String.prototype.endsWith) {
+			String.prototype.endsWith = function(searchString, position) {
+				var subjectString = this.toString();
+				if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
+					position = subjectString.length;
+				}
+				position -= searchString.length;
+				var lastIndex = subjectString.indexOf(searchString, position);
+				return lastIndex !== -1 && lastIndex === position;
+			};
+		}
+
     // Calculate width of text from DOM element or string. By Phil Freo <http://philfreo.com>
     $.fn.textWidth = function(text, font) {
         if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
@@ -523,6 +538,7 @@
             FLBuilder._initTemplateSelector();
             FLBuilder._bindOverlayEvents();
             FLBuilder._highlightEmptyCols();
+			FLBuilder._rebindEvents();
 
             $('html').addClass('fl-builder-edit').removeClass('fl-builder-show-admin-bar');
             $('body').addClass('fl-builder-edit');
@@ -576,6 +592,7 @@
         */
         show: function() {
 	        if ( ! $( 'html' ).hasClass( 'fl-builder-edit' ) ) {
+				FLBuilder._rebindEvents();
 	            FLBuilder._bindOverlayEvents();
 	            this.showMainToolbar();
 	            FLBuilderResponsiveEditing._switchTo('default');
@@ -1107,8 +1124,9 @@
             this.$el.find('.fl-builder-buy-button').on('click', FLBuilder._upgradeClicked);
 			this.$el.find('.fl-builder-upgrade-button').on('click', FLBuilder._upgradeClicked);
 
-            // Old search controller
-            //SearchUI.init();
+            this.$el.find('#fl-builder-toggle-notifications').on('click', this.onNotificationsButtonClicked.bind(this) );
+
+            FLBuilder.addHook('notificationsLoaded', this.onNotificationsLoaded.bind(this));
         },
 
         /**
@@ -1143,6 +1161,20 @@
 				defaultPosition: 'bottom',
 				edgeOffset: 6
 			});
+        },
+
+        onNotificationsButtonClicked: function() {
+            FLBuilder.triggerHook('toggleNotifications');
+        },
+
+        onNotificationsLoaded: function() {
+            $('body').removeClass('fl-builder-has-new-notifications');
+
+            var data = {
+	                action: 'fl_builder_notifications',
+	                read: true,
+	            }
+            FLBuilder.ajax(data);
         }
     };
 

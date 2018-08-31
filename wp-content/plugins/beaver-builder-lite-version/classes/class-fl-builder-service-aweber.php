@@ -68,8 +68,7 @@ final class FLBuilderServiceAWeber extends FLBuilderService {
 		// Make sure we have an authorization code.
 		if ( ! isset( $fields['auth_code'] ) || empty( $fields['auth_code'] ) ) {
 			$response['error'] = __( 'Error: You must provide an Authorization Code.', 'fl-builder' );
-		} // End if().
-		elseif ( 6 != count( explode( '|', $fields['auth_code'] ) ) ) {
+		} elseif ( 6 != count( explode( '|', $fields['auth_code'] ) ) ) {
 			$response['error'] = __( 'Error: Please enter a valid Authorization Code.', 'fl-builder' );
 		} // Try to connect and store the connection data.
 		else {
@@ -240,7 +239,6 @@ final class FLBuilderServiceAWeber extends FLBuilderService {
 
 			$api    = $this->get_api( $account_data['auth_code'] );
 			$data   = array(
-				'ws.op' => 'create',
 				'email' => $email,
 			);
 
@@ -253,16 +251,54 @@ final class FLBuilderServiceAWeber extends FLBuilderService {
 			}
 
 			try {
+
 				$account = $api->getAccount( $account_data['access_token'], $account_data['access_secret'] );
 				$url     = '/accounts/' . $account->id . '/lists/' . $settings->list_id . '/subscribers';
-				$result  = $api->adapter->request( 'POST', $url, $data, array(
-					'return' => 'headers',
-				) );
 
-				if ( is_array( $result ) && isset( $result['Status-Code'] ) && 201 == $result['Status-Code'] ) {
-					return $response;
+				// Try to check if subscribe already exists.
+				$get_subscriber = $api->adapter->request( 'GET', $url,
+					array(
+						'ws.op' => 'find',
+						'email' => $email,
+					)
+				);
+
+				// Update
+				if ( isset( $get_subscriber['entries'] ) && count( $get_subscriber['entries'] ) > 0 ) {
+					$subscriber_id = $get_subscriber['entries'][0]['id'];
+					if ( isset( $data['tags'] ) ) {
+						$data['tags'] = array(
+							'add' => $data['tags'],
+						);
+					}
+
+					try {
+						$result  = $api->adapter->request( 'PATCH', $url . '/' . $subscriber_id, $data, array(
+							'return' => 'headers',
+						) );
+
+						if ( is_array( $result ) && isset( $result['Status-Code'] ) && 209 == $result['Status-Code'] ) {
+							return $response;
+						} else {
+							$response['error'] = __( 'There was an error connecting to AWeber. Please try again.', 'fl-builder' );
+						}
+					} catch ( AWeberAPIException $e ) {
+						$response['error'] = sprintf(
+							__( 'There was an error subscribing to AWeber. %s', 'fl-builder' ),
+							$e->getMessage()
+						);
+					}
 				} else {
-					$response['error'] = __( 'There was an error connecting to AWeber. Please try again.', 'fl-builder' );
+					$data['ws.op'] = 'create';
+					$result  = $api->adapter->request( 'POST', $url, $data, array(
+						'return' => 'headers',
+					) );
+
+					if ( is_array( $result ) && isset( $result['Status-Code'] ) && 201 == $result['Status-Code'] ) {
+						return $response;
+					} else {
+						$response['error'] = __( 'There was an error connecting to AWeber. Please try again.', 'fl-builder' );
+					}
 				}
 			} catch ( AWeberAPIException $e ) {
 				$response['error'] = sprintf(
@@ -270,7 +306,7 @@ final class FLBuilderServiceAWeber extends FLBuilderService {
 					$e->getMessage()
 				);
 			}
-		}// End if().
+		}
 
 		return $response;
 	}
