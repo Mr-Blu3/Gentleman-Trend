@@ -60,33 +60,34 @@ body {
 .woocommerce-active .site-branding, .woocommerce-active .site-header .site-search {
     float: none;
 }
-.site-header .site-branding{
-    width: 95%;
-    margin: auto;
-}
+
 
 .site-search {
-    width: 42.73913%;
+    display: table-cell;
+    vertical-align: top;
 }
 
 .site-header .custom-logo-link, .site-header .site-logo-anchor, .site-header .site-logo-link, .site-search {
-    display: inline-block;
+    display: table-cell;
     vertical-align: top;
     margin-right: 6em;
 }
 
-@media (min-width: 768px) {
-    .custom-logo-link, .site-branding, .site-header-cart, .site-logo-anchor, .site-logo-link, .site-search {
-        margin: 1.41575em 0;
-
-    }
-    .woocommerce-active .site-header .site-search {
-        width: 42.73913%;
-    }
+.site-branding .logo {
+    padding:0 80px 0 0;
 }
 
 .site-branding a img {
     width: 300px;
+}
+
+.site-branding h1 {
+    display: table-cell;
+}
+
+.site-header .site-branding{
+    width: 95%;
+    margin: 50px auto;
 }
 
 .widget_product_search form button[type=submit], .widget_product_search form input[type=submit], .widget_search form button[type=submit], .widget_search form input[type=submit] {
@@ -97,4 +98,17 @@ body {
 
 .added_to_cart, .button, button, input[type=button], input[type=reset], input[type=submit] {
     padding: 0.85em 1.4em;
+}
+
+
+
+@media (min-width: 768px) {
+    .custom-logo-link, .site-branding, .site-header-cart, .site-logo-anchor, .site-logo-link, .site-search {
+        margin: 1.41575em 0;
+
+
+    }
+    .woocommerce-active .site-header .site-search {
+        width: 68%;
+    }
 }
